@@ -1,0 +1,134 @@
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 115px;
+  margin-bottom: 20px;
+}
+
+#login-title,
+#signup-title {
+  text-align: center;
+  letter-spacing: 10px;
+  margin: 0;
+}
+
+.signin-card,
+.register-card {
+  display: flex;
+  flex-direction: column;
+
+  width: 20%;
+  padding: 20px;
+  min-width: 320px;
+  margin: 20px 0;
+  border: solid 1px black;
+  border-radius: 10px;
+}
+
+.email-title,
+.password-title,
+.name-title {
+  margin-top: 20px;
+}
+
+input {
+  height: 40px;
+  border: solid 1px grey;
+  border-radius: 5px;
+}
+
+label {
+  font-size: 8px;
+  margin: 5px 0;
+}
+
+.btn-area {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 20px;
+}
+
+.admin-area {
+  display: none;
+  flex-direction: column;
+}
+
+.admin-btn {
+  font-family: "Noto Sans TC", sans-serif;
+  margin: 10px 20px;
+  padding: 5px 20px;
+  color: white;
+  background-color: black;
+  border-radius: 10px;
+  border: none;
+}
+
+#sign_in_btn,
+#sign_up_btn,
+#signup-submit-btn,
+#cancel-btn {
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  margin: 0 5px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+}
+
+#fb-signin-btn {
+  width: 100%;
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 1rem;
+  background-color: #4267b2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#profile-img {
+  width: 80px;
+  height: 80px;
+}
+
+.user-profile {
+  margin-top: 20px;
+}
+
+#admin-icon {
+  display: none;
+  padding: 5px;
+  background-color: rgb(158, 54, 54);
+  color: white;
+}
+
+.profile-wrapper {
+  display: flex;
+
+  margin-bottom: 20px;
+}
+
+#user-info-area {
+  margin: 0 20px;
+}
+
+.log-out-btn {
+  padding: 5px 30px;
+  color: white;
+  background-color: black;
+  border-radius: 10px;
+}
+
+@media (min-width: 900px) {
+  main {
+    margin: 140px;
+  }
+
+  .admin-area {
+    flex-direction: row;
+  }
+}
