@@ -12,11 +12,10 @@ const searchKeywords = async (req, res) => {
   console.log(paramsArr);
   const result = await searchModel.searchKeywordsDB(paramsArr);
   // 之後有空加上搜尋排序
-  console.log(result);
+
   result.sort(function (a, b) {
     return a - b;
   });
-  console.log(result);
 
   res.render("searchPage_f", {
     articles: result,
@@ -30,7 +29,7 @@ const searchCategory = async (req, res) => {
   let search_params = req.query.q;
   console.log(search_params);
   const articles = await searchModel.searchCategory(search_params);
-  console.log(articles);
+
   res.render("searchPage_f", {
     articles: articles,
     keywords: search_params,
@@ -62,7 +61,7 @@ const searchTag = async (req, res) => {
   let search_params = req.query.q;
   console.log(search_params);
   const articles = await searchModel.searchTag(search_params);
-  console.log(articles);
+
   res.render("searchPage_f", {
     articles: articles,
     keywords: search_params,
@@ -91,7 +90,7 @@ const searchTag = async (req, res) => {
 
 const getHotTags = async (req, res) => {
   const result = await searchModel.getHotTags();
-  console.log(result);
+
   res.json(result);
 };
 

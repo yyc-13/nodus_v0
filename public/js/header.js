@@ -43,7 +43,9 @@ function searchFunc() {
 }
 
 const toggleBtn = document.querySelector(".sidebar-toggle");
+
 const sidebar = document.querySelector("#sidebar");
+
 const toggleSVG = document.querySelector(".bi-list");
 let x = 90;
 toggleBtn.addEventListener("click", function () {
@@ -69,22 +71,24 @@ uploadBtn.addEventListener("click", function (e) {
       "</p>" +
       '<a href="/articles/newmd" class="btn btn-primary">I\'m Down!</a>' +
       "</div>" +
-      "</div>" +
-      '<div class="card col" style="width: 400px">' +
-      '<div class="card-body">' +
-      '<h4 class="card-title">使用 Medium 編輯器</h4>' +
-      '<p class="card-text-swal">' +
-      "「所見即所得編輯器。」" +
-      "使用一般文字編輯器點選不同工具列表，進行文字編輯與排版，以最直覺的方式撰寫文章。" +
-      "</p>" +
-      '<a href="/articles/editorjs" class="btn btn-primary">Choose Me!</a>' +
-      "</div>" +
-      "</div>" +
       "</div>",
 
     customClass: "swal-wide",
     showCloseButton: true,
     showCancelButton: false, // There won't be any cancel button
     showConfirmButton: false, // There won't be any confirm button
+
+    // medium 編輯器的部分，之後加在 html 上
+    //       '<div class="card col" style="width: 400px">' +
+    // '<div class="card-body">' +
+    // '<h4 class="card-title">使用 Medium 編輯器</h4>' +
+    // '<p class="card-text-swal">' +
+    // "「所見即所得編輯器。」" +
+    // "使用一般文字編輯器點選不同工具列表，進行文字編輯與排版，以最直覺的方式撰寫文章。" +
+    // "</p>" +
+    // '<a href="/articles/editorjs" class="btn btn-primary">Choose Me!</a>' +
+    // "</div>" +
+    // "</div>" +
+    // "</div>",
   });
 });

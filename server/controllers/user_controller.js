@@ -18,7 +18,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email + password);
+
   const hashedPassword = crypto
     .createHash("sha256")
     .update(password)
@@ -28,6 +28,7 @@ const userLogin = async (req, res) => {
   let dataData;
 
   const result = await userModel.authLogIn(email, hashedPassword);
+
   if (result.length < 1) {
     res.send("Sorry, can't find user.");
   } else {
@@ -36,10 +37,12 @@ const userLogin = async (req, res) => {
       name: result[0].name,
       email: result[0].email,
       hashedPassword: hashedPassword,
+      userId: result[0].user_id,
       // 之後再加上上傳照片
     };
 
     const userOutput = { data: userData };
+    console.log(userOutput);
     const accessToken = generateAccessToken(userOutput);
     await userModel.storeToken(accessToken, result[0].email);
 
@@ -66,27 +69,31 @@ const userRegister = async (req, res) => {
     .update(password)
     .digest("hex");
 
-  const userData = {
-    created_date: Date.now().toString(),
-    name: name,
-    email: email,
-    hashedPassword: hashedPassword,
-  };
-  const user = { data: userData };
-  const accessToken = generateAccessToken(user);
-
+  const url_id = Number(
+    Math.random().toString().substr(3) + Date.now()
+  ).toString(36);
+  console.log("url_id", url_id);
   const result = await userModel.createUser(
     Date.now().toString(),
     name,
     email,
     hashedPassword,
-    accessToken
+    url_id
   );
+  const userData = {
+    created_date: Date.now().toString(),
+    name: name,
+    email: email,
+    hashedPassword: hashedPassword,
+    userId: result.insertId,
+  };
+  const user = { data: userData };
+  console.log(result);
   if (result == "email have been registered.") {
     res.send({ status: "email have been registered." });
   } else {
     const id = result.insertId;
-
+    const accessToken = generateAccessToken(user);
     const dataData = {
       accessToken: accessToken,
       access_expired: 600000,
@@ -94,6 +101,7 @@ const userRegister = async (req, res) => {
         id: id,
         name: name,
         email: email,
+        url_id: url_id,
       },
     };
     res.cookie("accessToken", accessToken, {
@@ -136,8 +144,10 @@ const profileOrSignIn = async (req, res) => {
     console.log(accessToken);
     try {
       const user = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
-      req.user = user;
       console.log(user);
+      const result = await userModel.findUser(user.data.userId);
+      console.log(result);
+      res.redirect(`/user/${result[0].url_id}`);
       res.render("profile.ejs", { articles: [] });
     } catch (err) {
       console.error(err);
@@ -151,7 +161,7 @@ const profileOrSignIn = async (req, res) => {
 };
 
 if (Array.length > 1) {
-  getArticles.foreahc((article) => {});
+  getArticles.foreach((article) => {});
 }
 
 function generateAccessToken(user) {
@@ -160,10 +170,94 @@ function generateAccessToken(user) {
   });
 }
 
+const userChannel = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+  const result = await userModel.userChannel(req.body.url_id);
+  console.log("result", result);
+  let data = {
+    userResult: result.userResult,
+    articleResult: result.articleResult,
+  };
+  res.json(data);
+};
+
+const subscribe = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+  const result = await userModel.subscribe(
+    "subscribe",
+    req.body.articleSlug,
+    req.user.data.userId
+  );
+  console.log("result", result);
+  res.json(result);
+};
+const unsubscribe = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+  const result = await userModel.subscribe(
+    "unsubscribe",
+    req.body.articleSlug,
+    req.user.data.userId
+  );
+  console.log("result", result);
+  res.json(result);
+};
+
+const newcollection = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+  const result = await userModel.newcollection(
+    req.user.data.userId,
+    req.body.collectionName
+  );
+  console.log("result", result);
+  res.json(result);
+};
+
+const changedescription = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+  const result = await userModel.changedescription(
+    req.user.data.userId,
+    req.body.channelName,
+    req.body.description
+  );
+  console.log("result", result);
+  res.redirect("back");
+};
+
+const collectionList = async (req, res) => {
+  console.log("req.user", req.user);
+
+  const result = await userModel.collectionList(req.user.data.userId);
+  console.log("result", result);
+  res.json(result);
+};
+
+const channelAuth = async (req, res) => {
+  console.log("channelAuth", req.user);
+  console.log("channelAuth", req.body);
+  const result = await userModel.channelAuth(req.body.userUrl);
+  if (result[0].user_id == req.user.data.userId) {
+    res.json(1);
+  } else {
+    res.json(0);
+  }
+};
+
 module.exports = {
   userArticle,
   userLogin,
   userRegister,
   userProfile,
   profileOrSignIn,
+  userChannel,
+  subscribe,
+  unsubscribe,
+  newcollection,
+  changedescription,
+  collectionList,
+  channelAuth,
 };

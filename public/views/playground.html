@@ -1,246 +1,79 @@
 <!-- Bootstrap template  -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
-    <style>
-      .accordion-button {
-        border: none;
-      }
-      .col {
-        background-color: rgb(133, 182, 224);
-        border: 5px solid;
-      }
-    </style>
-    <title>Hello, world!</title>
-  </head>
-  <body>
-    <div class="container mt-3">
-      <div class="card-columns" id="cards">
-        <div class="card">
-          <img
-            src="https://images.unsplash.com/photo-1556656793-08538906a9f8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-            class="card-img-top"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">正常的圖片</h5>
-            <p class="card-text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
-              fuga corporis pariatur id quae ipsum deleniti eveniet similique
-              quo temporibus, voluptatibus animi blanditiis distinctio. Impedit
-              voluptatibus saepe perspiciatis expedita cupiditate.
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <img
-            src="https://images.unsplash.com/photo-1556656793-08538906a9f8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">變形的圖片</h5>
-            <p class="card-text">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos
-              reprehenderit sit pariatur quasi expedita! Eaque blanditiis aut
-              laboriosam dolorum dignissimos laudantium quam porro? Reiciendis
-              praesentium enim possimus facilis. Doloribus, reprehenderit!
-            </p>
-          </div>
-        </div>
+<head>
+  <title>Title</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <div class="card">
-          <div
-            class="card-img-top"
-            style="
-              height: 200px;
-              background-image: url(https://images.unsplash.com/photo-1556656793-08538906a9f8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80);
-              background-size: cover;
-            "
-          ></div>
-          <div class="card-body">
-            <h5 class="card-title">使用背景圖解決變形問題</h5>
-            <p class="card-text">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos
-              reprehenderit sit pariatur quasi expedita! Eaque blanditiis aut
-              laboriosam dolorum dignissimos laudantium quam porro? Reiciendis
-              praesentium enim possimus facilis. Doloribus, reprehenderit!
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <style>
+    .accordion-button {
+      border: none;
+    }
 
-    <div class="accordion" id="accordionExample" style="border: none">
-      <div class="">
-        <h2 class="" id="headingOne">
-          <button
-            class="accordion-button"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseOne"
-            aria-expanded="true"
-            aria-controls="collapseOne"
-          >
-            Accordion Item #1
-          </button>
-        </h2>
-        <div
-          id="collapseOne"
-          class="accordion-collapse collapse show"
-          aria-labelledby="headingOne"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <strong>This is the first item's accordion body.</strong> It is
-            shown by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseTwo"
-            aria-expanded="false"
-            aria-controls="collapseTwo"
-          >
-            Accordion Item #2
-          </button>
-        </h2>
-        <div
-          id="collapseTwo"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingTwo"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <strong>This is the second item's accordion body.</strong> It is
-            hidden by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseThree"
-            aria-expanded="false"
-            aria-controls="collapseThree"
-          >
-            Accordion Item #3
-          </button>
-        </h2>
-        <div
-          id="collapseThree"
-          class="accordion-collapse collapse"
-          aria-labelledby="headingThree"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <strong>This is the third item's accordion body.</strong> It is
-            hidden by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div>
-        其它的元素會超出格線範圍，並且預設必須加入寬度才能顯示 Lorem, ipsum
-        dolor sit amet consectetur adipisicing elit. Libero omnis quam, enim,
-        suscipit, minima illum vel vitae aliquid voluptates ut sed asperiores
-        aut impedit ipsam. Explicabo saepe repellendus tenetur architecto velit
-        enim animi possimus assumenda dolores suscipit voluptatibus itaque quae
-        inventore adipisci, dolor amet, illo maiores, repellat voluptate ex
-        debitis.
-      </div>
-    </div>
-    <!-- align-items 放父層上面，align-self 放 items 上面 -->
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-6"><div class="box">格線內的 .box</div></div>
-        <div class="col-6"><div class="box">格線內的 .box</div></div>
-      </div>
-    </div>
-    <input type="file" accept="image/*" />
-    <div class="row">
-      <div class="col">auto</div>
-      <div class="col">auto</div>
-      <div class="col">auto</div>
-    </div>
-    <div class="d-flex justify-content-around">
-      <a href="#">asd</a>
-      <button>asda</button>
-      <p>asdasf</p>
-      <div>
-        <div>
-          <div>asdasd</div>
-        </div>
-      </div>
-      <div>asfasf</div>
-    </div>
+    .col {
+      background-color: rgb(133, 182, 224);
+      border: 5px solid;
+    }
+  </style>
+  <title>Hello, world!</title>
+  <style>
+    div {
+      width: 160px;
+      height: 145px;
+      overflow: hidden;
+      border: 1px solid black;
+    }
 
-    <div class="box">
-      <p class="JQellipsis">
-        Astral
-        Web是一群對網路充滿熱情的團隊，我們相信網路的力量無遠弗屆，人人都有機會開創網路事業。一邊享受網路事業帶來的樂趣，一邊秉持著工作即是玩樂的精神，不斷激發各種靈感為客戶提高收益，提供最完善的服務。
+    div img {
+      width: 100%;
+      min-height: 100%;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="row g-0 bg-light">
+    <div class="col-md-6 mb-md-0 p-md-4">
+      <div style="width:180px;height:180px;background-repeat:no-repeat;
+      background-position: center;
+      background-image:url(${e.cover_images});
+      background-size: cover;"></div>
+    </div>
+    <div class="col-md-6 p-4 ps-md-0">
+      <h3 class="mt-0">${e.title}</h3>
+      <p>
+        ${e.content_html}
       </p>
+      <a href="/articles/${e.slug}" class="link">閱讀更多</a>
     </div>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-      $(function () {
-        var len = 50; // 超過50個字以"..."取代
-        $(".JQellipsis").each(function (i) {
-          if ($(this).text().length > len) {
-            $(this).attr("title", $(this).text());
-            var text =
-              $(this)
-                .text()
-                .substring(0, len - 1) + "...";
-            $(this).text(text);
-          }
-        });
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script>
+    $(function () {
+      var len = 50; // 超過50個字以"..."取代
+      $(".JQellipsis").each(function (i) {
+        if ($(this).text().length > len) {
+          $(this).attr("title", $(this).text());
+          var text =
+            $(this)
+              .text()
+              .substring(0, len - 1) + "...";
+          $(this).text(text);
+        }
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>

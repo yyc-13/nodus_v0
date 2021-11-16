@@ -1,24 +1,24 @@
 <div class="col-10 container d-flex flex-row position-relative">
   <%- include("tags") %>
-  <div id="searchIndicator"></div>
-  <% articles.forEach(e =>{ %>
-  <div class="box col-6">
-    <div class="row g-0 bg-light h-10">
-      <div class="col-md-6 mb-md-0 p-md-4">
-        <img
-          src="http://unsplash.it/300/300?gravity=center"
-          class="w-100"
-          alt="..."
-        />
-      </div>
-      <div class="col-md-6 p-4 ps-md-0 h-5">
-        <h5 class="mt-0"><%- e.title %></h5>
-        <div class="card-text">
-          <p class=""><%- e.content_html %></p>
+    <div id="searchIndicator"></div>
+    <% articles.forEach(e=>{ %>
+      <div class="box col-6">
+        <div class="row g-0 bg-light h-10">
+          <div class="col-md-6 mb-md-0 p-md-4">
+            <img src="<%= e.cover_images %>" class="w-100" alt="..." />
+          </div>
+          <div class="col-md-6 p-4 ps-md-0 h-5">
+            <h5 class="mt-0">
+              <%- e.title %>
+            </h5>
+            <div class="card-text">
+              <p class="">
+                <%- e.content_html %>
+              </p>
+            </div>
+            <a href="/articles/<%= e.slug %>" class="link">閱讀文章</a>
+          </div>
         </div>
-        <a href="articles/<%= e.slug %>" class="link">閱讀文章</a>
       </div>
-    </div>
-  </div>
-  <% }) %>
+      <% }) %>
 </div>

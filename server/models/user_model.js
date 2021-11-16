@@ -13,7 +13,7 @@ const createUser = async (
   name,
   email,
   hashedPassword,
-  accessToken
+  url_id
 ) => {
   const conn = await pool.getConnection();
   try {
@@ -28,8 +28,8 @@ const createUser = async (
     }
 
     const [result] = await conn.query(
-      "INSERT INTO user_info (created_date,name, email, password, access_token) VALUES (?,?,?,?,?)",
-      [created_date, name, email, hashedPassword, accessToken]
+      "INSERT INTO user_info (user_created_date,name, email, password,url_id) VALUES (?,?,?,?,?)",
+      [created_date, name, email, hashedPassword, url_id]
     );
     await conn.query("COMMIT");
     return result;
@@ -123,6 +123,192 @@ const getUserDetail = async (email, roleId) => {
   }
 };
 
+const userChannel = async (url_id) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [userResult] = await conn.query(
+      `select * from user_info where url_id = "${url_id}"`
+    );
+    const userId = userResult[0].user_id;
+    const [articleResult] = await conn.query(
+      `select * from articles where user_id = "${userId}"`
+    );
+
+    await conn.query("COMMIT");
+    return { userResult, articleResult };
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const subscribe = async (type, articleslug, userId) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [articleResult] = await conn.query(
+      `select * from articles where slug = "${articleslug}"`
+    );
+    const channel_user_id = articleResult[0].user_id;
+    let subResult;
+    if (type == "subscribe") {
+      [subResult] = await conn.query(
+        "insert into subscription (channel_user_id,user_id) values (?,?)",
+        [channel_user_id, userId]
+      );
+    } else if (type == "unsubscribe") {
+      [subResult] = await conn.query(
+        `delete from subscription where channel_user_id = ${channel_user_id} and user_id = ${userId}`
+      );
+    }
+    await conn.query("commit");
+    return subResult;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const newcollection = async (userId, collectionName) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [result] = await conn.query(
+      `insert into collection (collection_name,user_id) values(?,?)`,
+      [collectionName, userId]
+    );
+    await conn.query("commit");
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const channelCoverImg = async (userId, coverImgUrl) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [result] = await conn.query(
+      `UPDATE user_info set coverPhoto = "${coverImgUrl}" where user_id = ${userId}`
+    );
+    await conn.query("commit");
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const profilePic = async (userId, coverImgUrl) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [result] = await conn.query(
+      `UPDATE user_info set profile_pic = "${coverImgUrl}" where user_id = ${userId}`
+    );
+    await conn.query("commit");
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const changedescription = async (userId, channelName, description) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [result] = await conn.query(
+      `UPDATE user_info set channelTitle = "${channelName}", channelDescription = (?) where user_id = ${userId}`,
+      [description]
+    );
+    await conn.query("commit");
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const findUser = async (userId) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [result] = await conn.query(
+      `select * from user_info where user_id = ${userId}`
+    );
+    await conn.query("commit");
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const collectionList = async (userId) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [result] = await conn.query(
+      `select * from collection where user_id = ${userId}`
+    );
+    let collectionList = {};
+    for (let i = 0; i < result.length; i++) {
+      const [result2] = await conn.query(
+        `select * from collection_intermediate as a left join articles as b on a.article_id = b.article_id where collection_id = ${result[i].collection_id}`
+      );
+      collectionList[result[i].collection_name] = result2;
+    }
+    console.log(collectionList);
+    return collectionList;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+const channelAuth = async (userUrl) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("start transaction");
+    const [result] = await conn.query(
+      `select * from user_info where url_id = "${userUrl}"`
+    );
+
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
 module.exports = {
   storeToken,
   authLogIn,
@@ -130,4 +316,13 @@ module.exports = {
   userArticle,
   USER_ROLE,
   getUserDetail,
+  userChannel,
+  subscribe,
+  newcollection,
+  channelCoverImg,
+  profilePic,
+  changedescription,
+  findUser,
+  collectionList,
+  channelAuth,
 };

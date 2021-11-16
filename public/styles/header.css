@@ -3,3 +3,6 @@
   width: 2.25em;
   background-color: olive;
 }
+.swal2-popup {
+  width: auto !important;
+}

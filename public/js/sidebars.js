@@ -34,3 +34,28 @@ for (i = 0; i < dropdown.length; i++) {
     }
   });
 }
+
+const logoutBtn = document.querySelector(".logout");
+
+logoutBtn.addEventListener("click", (e) => {
+  console.log(1);
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("expired_time");
+  fetch("/user/deletecookie", {
+    method: "GET",
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((res) => {
+      console.log(2);
+      Swal.fire({
+        icon: "success",
+        title: "成功登出",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        self.location.href = "/";
+      });
+    });
+});

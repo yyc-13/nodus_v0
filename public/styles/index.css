@@ -8,7 +8,9 @@
 body {
   margin: 0;
 }
-
+#bodyWrapper {
+  min-height: calc(100vh);
+}
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
   background-color: #555;
