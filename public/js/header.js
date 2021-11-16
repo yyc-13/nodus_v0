@@ -32,7 +32,7 @@ function searchFunc() {
     console.log(searchInput);
     const searchParams = searchInput.join("+");
     console.log(searchParams);
-    let baseURL = "http://localhost:3000";
+    let baseURL = "https://nodus.app";
     // 之後可以把 baseURL 放在 env 裡，讓 ec2 也可以直接用
     console.log("我要轉跳囉");
     window.location.href =
