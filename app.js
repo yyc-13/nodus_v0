@@ -121,7 +121,7 @@ app.post(
   }
 );
 
-const port = 3007;
+const port = 3000;
 app.listen(port, () => {
   console.log(`Nodus listening on port ${port}`);
   var datetime =
