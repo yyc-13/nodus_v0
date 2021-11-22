@@ -16,7 +16,9 @@ main {
   overflow-x: auto;
   overflow-y: hidden;
 }
-
+#sidebar {
+  min-height: 100vh;
+}
 .b-example-divider {
   flex-shrink: 0;
   width: 1.5rem;

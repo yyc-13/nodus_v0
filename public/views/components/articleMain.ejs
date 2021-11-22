@@ -3,20 +3,37 @@
     <div id="searchIndicator"></div>
     <% articles.forEach(e=>{ %>
       <div class="box col-6">
-        <div class="row g-0 bg-light h-10">
+        <div class="w3-margin row g-0 w3-light-gray h-10 w3-border-bottom" style="height: 289px;">
           <div class="col-md-6 mb-md-0 p-md-4">
-            <img src="<%= e.cover_images %>" class="w-100" alt="..." />
+            <a href="/articles/<%= e.slug %>">
+              <div style="border-radius: 10px; width:243px;height:243px;background-repeat:no-repeat;
+            background-position: center;
+            background-image:url(<%= e.cover_images %>);
+            background-size: cover;"></div>
+            </a>
+
           </div>
           <div class="col-md-6 p-4 ps-md-0 h-5">
-            <h5 class="mt-0">
-              <%- e.title %>
-            </h5>
-            <div class="card-text">
-              <p class="">
-                <%- e.content_html %>
-              </p>
-            </div>
-            <a href="/articles/<%= e.slug %>" class="link">閱讀文章</a>
+            <a href="/articles/<%= e.slug %>">
+              <h3 class="mt-0 card-title">
+                <%- e.title %>
+              </h3>
+            </a>
+            <a href="/articles/<%= e.slug %>">
+              <h6 class="text-secondary">
+                <%= e.name %> <br>
+                  <%= e.article_created_date %>
+              </h6>
+            </a>
+            <a href="/articles/<%= e.slug %>">
+              <div class="card-text">
+                <p class="">
+                  <%- e.content_html %>
+                </p>
+              </div>
+            </a>
+            <br>
+
           </div>
         </div>
       </div>

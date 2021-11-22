@@ -3,7 +3,7 @@ const searchModel = require("../models/search_model");
 const searchKeywords = async (req, res) => {
   // get searchKeywords
   console.log("you are in search API!");
-  let search_params = req.query.search_query;
+  let search_params = req.params.params;
   console.log(search_params);
   if (search_params == undefined) {
     return;
@@ -16,12 +16,7 @@ const searchKeywords = async (req, res) => {
   result.sort(function (a, b) {
     return a - b;
   });
-
-  res.render("searchPage_f", {
-    articles: result,
-    keywords: search_params,
-    user: {},
-  });
+  res.json(result);
 };
 
 const searchCategory = async (req, res) => {
@@ -30,7 +25,7 @@ const searchCategory = async (req, res) => {
   console.log(search_params);
   const articles = await searchModel.searchCategory(search_params);
 
-  res.render("searchPage_f", {
+  res.render("searchTag", {
     articles: articles,
     keywords: search_params,
     user: {
@@ -55,37 +50,26 @@ const searchCategory = async (req, res) => {
     ],
   });
 };
-
+const searchCat = async (req, res) => {
+  res.render("searchCat");
+};
 const searchTag = async (req, res) => {
-  console.log("you are in tag API!");
-  let search_params = req.query.q;
-  console.log(search_params);
-  const articles = await searchModel.searchTag(search_params);
+  res.render("searchTag");
+};
+const util = require("util");
 
-  res.render("searchPage_f", {
-    articles: articles,
-    keywords: search_params,
-    user: {
-      collection: [],
-    },
-    tags: [
-      "中美南海駁火",
-      "大 S 離婚",
-      "Next.js",
-      "大嘻哈時代",
-      "氣候高峰會",
-      "高端疫苗",
-      "防疫",
-      "英雄聯盟世界盃",
-      "NBA 熱身賽",
-      "bootstrap5",
-      "大家都看無的 NFT",
-      "必比登美食",
-      "特斯拉",
-      "Macbook Pro",
-      "假日去哪玩",
-    ],
-  });
+const tagArticle = async (req, res) => {
+  let search_params = req.params.params;
+  console.log("search_params", search_params);
+  const result = await searchModel.searchTag(search_params);
+  res.json(result);
+};
+const catArticle = async (req, res) => {
+  let search_params = req.params.params;
+  console.log("search_params", search_params);
+  const result = await searchModel.searchCat(search_params);
+  console.log("cat result", result);
+  res.json(result);
 };
 
 const getHotTags = async (req, res) => {
@@ -94,4 +78,17 @@ const getHotTags = async (req, res) => {
   res.json(result);
 };
 
-module.exports = { searchKeywords, searchCategory, searchTag, getHotTags };
+const keywords = async (req, res) => {
+  res.render("searchKey");
+};
+
+module.exports = {
+  searchKeywords,
+  searchCategory,
+  searchCat,
+  searchTag,
+  getHotTags,
+  tagArticle,
+  catArticle,
+  keywords,
+};

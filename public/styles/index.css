@@ -5,6 +5,14 @@
   font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
+.articleCard {
+  box-shadow: 10px 10px;
+}
+
+.bgDark {
+  background-color: #0b0022 !important;
+}
+
 body {
   margin: 0;
 }
@@ -285,7 +293,7 @@ body {
 }
 
 .container {
-  margin-top: 70px;
+  margin-top: 90px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;

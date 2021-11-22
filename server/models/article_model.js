@@ -14,7 +14,7 @@ const createArticle = async (/* 傳進來的 variable */) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -22,7 +22,9 @@ const getArticles = async () => {
   const conn = await pool.getConnection();
   try {
     await conn.query("START TRANSACTION");
-    const [result] = await conn.query("select * from articles");
+    const [result] = await conn.query(
+      "select * from articles left join user_info on articles.user_id = user_info.user_id"
+    );
 
     await conn.query("COMMIT");
     return result;
@@ -30,7 +32,7 @@ const getArticles = async () => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -40,11 +42,31 @@ const mdInsert = async (articlePack) => {
     const articleArr = Object.values(articlePack);
 
     await conn.query("START TRANSACTION");
-
+    const tags = articleArr[4].split(" ");
     const [result] = await conn.query(
-      "INSERT INTO articles (user_id, title,content,category,tag,description,cover_images,article_created_date,slug,content_html,reading_time,likes,views) VALUES (?)",
+      "INSERT INTO articles (user_id, title,content,category,tag,description,cover_images,article_created_date,edited,content_html,reading_time,slug,likes,views) VALUES (?)",
       [articleArr]
     );
+
+    tags.forEach(async (el) => {
+      const [tagResult] = await conn.query(
+        `select * from tags where tag = "${el}"`
+      );
+
+      if (tagResult.length > 0) {
+        console.log("tag exist");
+        tagResult[0].tags_id;
+        await conn.query(
+          `update tags set recom_score = recom_score +1 where tags_id =  ${tagResult[0].tags_id}`
+        );
+      } else {
+        console.log("tag not exist");
+        await conn.query(`insert into tags (tag,recom_score) values(?,?)`, [
+          el,
+          1,
+        ]);
+      }
+    });
 
     await conn.query("COMMIT");
     return result;
@@ -52,10 +74,47 @@ const mdInsert = async (articlePack) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
+const mdEdit = async (articlePack) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("START TRANSACTION");
+    const [result] = await conn.query(
+      `UPDATE articles set title = (?), content = (?), category = (?), tag =(?), edited = (?),content_html = (?), reading_time = (?) where articles.slug = (?)`,
+      [
+        articlePack.title,
+        articlePack.markdown,
+        articlePack.category,
+        articlePack.tag,
+        articlePack.edited,
+        articlePack.sanitizedHtml,
+        articlePack.readingTime,
+        articlePack.slug,
+      ]
+    );
+    var imgResult;
+    if (articlePack.coverPhotoPath) {
+      console.log("articlePack.coverPhotoPath is true");
+    } else {
+      console.log("articlePack.coverPhotoPath is false");
+    }
 
+    if (articlePack.coverPhotoPath) {
+      [imgResult] = await conn.query(
+        `update articles set cover_images = COALESCE("${articlePack.coverPhotoPath}",cover_images) where articles.slug = "${articlePack.slug}"`
+      );
+    }
+    await conn.query("commit");
+    return { result, imgResult };
+  } catch (error) {
+    console.log(error);
+    return -1;
+  } finally {
+    conn.release();
+  }
+};
 const searchArticles = async (slug) => {
   const conn = await pool.getConnection();
   try {
@@ -76,7 +135,7 @@ const searchArticles = async (slug) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -111,9 +170,9 @@ const searchUser = async (articleSlug, userId) => {
       }
     }
     let collectionContent;
-    if (collectQueryStr.lenght > 10) {
+    if (collectQueryStr.length > 10) {
       console.log("collectQueryStr", collectQueryStr);
-      let collectionQuery = `select * from collection_intermediate where article_id = ${article[0].article_id} and (${collectQueryStr})`;
+      let collectionQuery = `select * from collection_intermediate where article_id = ${article[0].article_id} and ${collectQueryStr}`;
       [collectionContent] = await conn.query(collectionQuery);
       console.log("collectionContent", collectionContent);
     } else {
@@ -140,23 +199,25 @@ const searchUser = async (articleSlug, userId) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
-const recommend = async (articleSlug, userID) => {
+const recommend = async (articleSlug) => {
   const conn = await pool.getConnection();
   try {
     await conn.query("Start Transaction");
     const [result] = await conn.query(
       `SELECT * from articles where slug = "${articleSlug}"`
     );
+    console.log(result);
     const category = result[0].category;
+    const userID = result[0].user_id;
     const [recomSameCat] = await conn.query(
-      `select * from articles as a left JOIN user_info as b on a.user_id = b.user_id where category = "${category}" order by article_id desc limit 3`
+      `select * from articles as a left JOIN user_info as b on a.user_id = b.user_id where a.category = "${category}" and a.user_id != ${userID} order by a.article_id desc limit 3`
     );
     const [recomNewest] = await conn.query(
-      `select * from articles as a left JOIN user_info as b on a.user_id = b.user_id where category != "${category}" order by article_id desc limit 3`
+      `select * from articles as a left JOIN user_info as b on a.user_id = b.user_id where a.category != "${category}" and a.user_id !=${userID} order by a.article_id desc limit 3`
     );
 
     await conn.query("commit");
@@ -165,7 +226,7 @@ const recommend = async (articleSlug, userID) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 const comment = async (articleSlug, userId) => {
@@ -185,7 +246,7 @@ const comment = async (articleSlug, userId) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -216,7 +277,7 @@ const saveHistory = async (userId, articleSlug) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -234,7 +295,22 @@ const savetocollection = async (collectionId, articleId, userId) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
+  }
+};
+
+const unchecked = async (collectionId, articleId, userId) => {
+  const conn = await pool.getConnection();
+  try {
+    const result = await conn.query(
+      `delete from collection_intermediate where collection_id = ${collectionId} and article_id = ${articleId}`
+    );
+    return result;
+  } catch (error) {
+    console.log(error);
+    return -1;
+  } finally {
+    conn.release();
   }
 };
 
@@ -258,7 +334,7 @@ const newComment = async (
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -282,7 +358,7 @@ const likeBtn = async (articleId, category, userId) => {
     } else {
       console.log("dislike -1");
       [countResult] = await conn.query(
-        `update articles set likes = likes + 1 where article_id = ${articleId}`
+        `update articles set likes = likes - 1 where article_id = ${articleId}`
       );
     }
     await conn.query("commit");
@@ -291,13 +367,65 @@ const likeBtn = async (articleId, category, userId) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
+};
+
+const clickedBtn = async (articleId, category, userId) => {
+  const conn = await pool.getConnection();
+  try {
+    const [result] = await conn.query(
+      `delete from likes where user_id = ${userId} and article_id = ${articleId}`
+    );
+    if (category) {
+      await conn.query(
+        `update articles set likes = likes -1 where article_id = ${articleId}`
+      );
+    } else {
+      await conn.query(
+        `update articles set likes = likes + 1 where article_id = ${articleId}`
+      );
+    }
+    return result;
+  } catch (err) {
+    console.log(err);
+    return -1;
+  } finally {
+    conn.release();
+  }
+};
+
+const editArticle = async (articleSlug) => {
+  const conn = await pool.getConnection();
+  const [result] = await conn.query(
+    `select * from articles where slug = "${articleSlug}"`
+  );
+  conn.release();
+  return result;
+};
+
+const deleteArticle = async (userId, articleSlug) => {
+  const conn = await pool.getConnection();
+  const result = await conn.query(
+    `delete from articles where slug = "${articleSlug}"`
+  );
+  conn.release();
+  return result;
+};
+
+const history = async (userId) => {
+  const conn = await pool.getConnection();
+  const [result] = await conn.query(
+    `select * from history_intermediate left join articles on history_intermediate.article_id = articles.article_id left join user_info on articles.user_id = user_info.user_id where history_intermediate.user_id = ${userId} and articles.user_id != ${userId} order by history_intermediate.history_id DESC`
+  );
+  conn.release();
+  return result;
 };
 
 module.exports = {
   searchArticles,
   mdInsert,
+  mdEdit,
   getArticles,
   createArticle,
   searchUser,
@@ -305,6 +433,11 @@ module.exports = {
   comment,
   saveHistory,
   savetocollection,
+  unchecked,
   newComment,
   likeBtn,
+  clickedBtn,
+  deleteArticle,
+  editArticle,
+  history,
 };

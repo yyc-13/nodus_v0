@@ -1,4 +1,3 @@
-// https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
 function dynamicallyLoadScript(url) {
   var script = document.createElement("script"); // create a script DOM node
   script.src = url; // set its src to the provided URL
@@ -35,10 +34,23 @@ for (i = 0; i < dropdown.length; i++) {
   });
 }
 
-const logoutBtn = document.querySelector(".logout");
+// const logoutBtn = document.querySelector(".logout");
+const sidebarUrl = "/user/authenticateonly";
+fetch(sidebarUrl, {
+  method: "GET",
+}).then((res) => {
+  if (res.status !== 200) {
+    document.querySelector(".logout").classList.add("d-none");
+  } else {
+    document.querySelector(".login").classList.add("d-none");
+  }
+});
+document.querySelector(".login").addEventListener("click", (e) => {
+  e.preventDefault();
+  self.location.href = "/user/profile";
+});
 
-logoutBtn.addEventListener("click", (e) => {
-  console.log(1);
+document.querySelector(".logout").addEventListener("click", (e) => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("expired_time");
   fetch("/user/deletecookie", {
@@ -48,7 +60,6 @@ logoutBtn.addEventListener("click", (e) => {
       return res.json();
     })
     .then((res) => {
-      console.log(2);
       Swal.fire({
         icon: "success",
         title: "成功登出",

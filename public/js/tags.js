@@ -1,11 +1,12 @@
-const url = "/search/getHotTags";
-fetch(url, {
+const tagUrl = "/search/getHotTags";
+fetch(tagUrl, {
   method: "GET",
 })
   .then((res) => {
     return res.json();
   })
   .then((res) => {
+    console.log(res);
     var html = ejs.render(
       `
     <% tags.forEach(e =>{ %>

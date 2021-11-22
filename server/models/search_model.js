@@ -26,7 +26,7 @@ const searchKeywordsDB = async (paramsArr) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -44,29 +44,38 @@ const searchCategory = async (queryParams) => {
     console.log(err);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
 const searchTag = async (queryParams) => {
   const conn = await pool.getConnection();
   try {
-    await conn.query("START TRANSACTION");
+    console.log("asdasd", queryParams);
     const [result] = await conn.query(
-      `select tags_id from tags where tag = "${queryParams}"`
+      `select * from articles as a left join user_info as b on a.user_id = b.user_id where tag like "%${queryParams}%" `
     );
-    console.log(result);
-    const [articles] = await conn.query(
-      `select * from tag_interm left join articles on tag_interm.article_id = articles.article_id where tag_id= ${result[0].tags_id} `
-    );
-
-    await conn.query("Commit");
-    return articles;
+    return result;
   } catch (err) {
     await conn.query("ROLLBACK");
     console.log(err);
   } finally {
-    await conn.release();
+    conn.release();
+  }
+};
+
+const searchCat = async (queryParams) => {
+  const conn = await pool.getConnection();
+  try {
+    const [result] = await conn.query(
+      `select * from articles as a left join user_info as b on a.user_id = b.user_id where category like "%${queryParams}%" `
+    );
+    return result;
+  } catch (err) {
+    await conn.query("ROLLBACK");
+    console.log(err);
+  } finally {
+    conn.release();
   }
 };
 
@@ -83,7 +92,7 @@ const getHotTags = async () => {
     await conn.query("ROLLBACK");
     console.log(err);
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -91,5 +100,6 @@ module.exports = {
   searchKeywordsDB,
   searchCategory,
   searchTag,
+  searchCat,
   getHotTags,
 };

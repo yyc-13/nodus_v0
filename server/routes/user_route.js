@@ -12,6 +12,8 @@ const {
   changedescription,
   collectionList,
   channelAuth,
+  subscription,
+  getuser,
 } = require("../controllers/user_controller");
 const path = require("path");
 const { authentication, authenticateOnly } = require("../../util/util");
@@ -23,29 +25,32 @@ const { authentication, authenticateOnly } = require("../../util/util");
 // render 區域
 router.route("/profile").get(authentication(), profileOrSignIn);
 
-router.route("/sign*").get(function (req, res) {
-  res.render("userSign");
-});
+// router.route("/sign*").get(function (req, res) {
+//   res.render("userSign");
+// });
 router.route("/register").get(function (req, res) {
   res.render("register");
 });
 router.route("/article").get(function (req, res) {
   res.render("userArticle");
 }); // render
+router.route("/subscription").get(function (req, res) {
+  res.render("user/subscription");
+});
 router.route("/collectiontab").get(function (req, res) {
-  var options = {
-    root: path.join(__dirname, "../../public/views/user"),
-  };
-  res.sendFile("collectionTab.html", options);
+  res.render("user/collectionTab");
 });
 
+router.route("/history").get(function (req, res) {
+  res.render("history");
+});
 // API 區域
 router.route("/profileAuth").get(authentication(), function (req, res) {
   console.log(req.user);
   res.json(req.user);
   // res.render("profile", { articles: [] });
 });
-
+router.route("/subscription").post(authentication(), subscription);
 router.route("/article/api").get(authentication(), userArticle);
 router.route("/login").post(userLogin);
 router.route("/register").post(userRegister);
@@ -60,21 +65,19 @@ router.route("/deletecookie").get(function (req, res) {
 
 router.route("/authenticateonly").get(authenticateOnly());
 router.route("/userChannel").post(authentication(), userChannel);
-router.get("/:url_id", async (req, res) => {
-  var options = {
-    root: path.join(__dirname, "../../public/views/user"),
-  };
-  res.sendFile("manageProfile.html", options);
-});
+router.route("/getuser").get(authentication(), getuser);
 router.route("/subscribe").post(authentication(), subscribe);
 router.route("/unsubscribe").post(authentication(), unsubscribe);
 router.route("/newCollectionList").post(authentication(), newcollection);
 router.route("/changedescription").post(authentication(), changedescription);
 router.route("/collectionList").post(authentication(), collectionList);
 router.route("/channelAuth").post(authentication(), channelAuth);
+router.get("/:url_id", async (req, res) => {
+  res.render("user/manageProfile");
+});
 // router.route("/collectionCover").post(authentication(), collectionCover);
 // router.route("/collection").get();
-// router.route("/subscription").get();
+
 // router.route("/profileAuth").get(authentication());
 
 module.exports = router;

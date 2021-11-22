@@ -23,11 +23,12 @@ const saveArticleAndRedirect = async (req, res) => {
   articlePack.description = req.body.description;
   articlePack.coverPhotoPath = req.body.coverPhotoImagePath;
   articlePack.created_date = new Date().today() + " @ " + new Date().timeNow();
+  articlePack.edited = req.body.edited;
 
   const currentTime = Date.now().toString();
 
   const articleId = SHA256(currentTime + articlePack.title).toString();
-  articlePack.slug = articleId;
+
   if (articlePack.markdown) {
     articlePack.sanitizedHtml = dompurify.sanitize(
       marked(articlePack.markdown)
@@ -41,15 +42,20 @@ const saveArticleAndRedirect = async (req, res) => {
   console.log("wordCount", wordCount);
 
   articlePack.readingTime = Math.ceil(wordCount / 250);
-
+  console.log("articlePack.edited", articlePack.edited);
+  console.log(!articlePack.edited);
+  console.log(articlePack.edited);
   // 進 db
-  if (req.body.firstTime !== "0") {
+  if (articlePack.edited == false) {
+    articlePack.slug = articleId;
     articlePack.likes = 0;
     articlePack.views = 0;
     console.log("articlePack", articlePack);
     const insertResult = await Article.mdInsert(articlePack);
+
     console.log("insertResult", insertResult);
   } else {
+    articlePack.slug = req.body.slug;
     const editResult = await Article.mdEdit(articlePack);
     console.log("editResult", editResult);
   }
@@ -67,51 +73,37 @@ const getArticles = async (req, res) => {
   if (result == -1) {
     res.status(500);
   } else {
+    console.log(result);
     res.render("index_f", {
       articles: result,
-      user: {
-        collection: ["寫扣相關", "我最愛的美食", "私藏經典", "療癒身心收藏"],
-      },
-      tags: [
-        "中美南海駁火",
-        "大 S 離婚",
-        "Next.js",
-        "大嘻哈時代",
-        "氣候高峰會",
-        "高端疫苗",
-        "防疫",
-        "英雄聯盟世界盃",
-        "NBA 熱身賽",
-        "bootstrap5",
-        "大家都看無的 NFT",
-        "必比登美食",
-        "特斯拉",
-        "Macbook Pro",
-        "假日去哪玩",
-      ],
     });
   }
+};
+
+const indexArticles = async (req, res) => {
+  let result = await Article.getArticles();
+  result = result.reverse();
+  res.json(result);
 };
 
 const saveList = async (req, res) => {
   console.log(req.user);
   const user = req.user;
   const result = await userModel.user;
+  res.json(result);
 };
 
 const showArticle = async (req, res) => {
   console.log(req.body);
   const result = await Article.searchArticles(req.body.articleId);
   console.log(result);
+  res.json(result);
 };
 
 const articleshowArticle = async (req, res) => {
   console.log("req.body", req.body);
   console.log("req.user", req.user);
-  const result = await Article.searchArticles(
-    req.body.articleSlug,
-    req.user.data.userId
-  );
+  const result = await Article.searchArticles(req.body.articleSlug);
   console.log("result", result);
   const article = result.articleResult[0];
   const author = result.authorResult[0];
@@ -131,7 +123,7 @@ const articleshowArticle = async (req, res) => {
       readingTime: article.reading_time,
       tags: article.tag,
       articleHtml: article.content_html,
-
+      views: article.views,
       publishDate: article.article_created_date,
       description: article.description,
       likeCount: article.likes,
@@ -145,6 +137,10 @@ const articleshowArticle = async (req, res) => {
 const user = async (req, res) => {
   console.log("req.body in user", req.body);
   console.log("req.user in user", req.user);
+  if (!req.user) {
+    res.json(-1);
+    return -1;
+  }
   const result = await Article.searchUser(
     req.body.articleSlug,
     req.user.data.userId
@@ -161,6 +157,7 @@ const user = async (req, res) => {
     userCollected: result.collectionContent,
     userLike: result.likeContent,
     userSubscribed: result.subscription,
+    userAvatar: result.user[0].profile_pic,
   };
   // 撈 user 的收藏清單
   // 撈 user 有沒有收藏
@@ -172,10 +169,7 @@ const user = async (req, res) => {
 const recommend = async (req, res) => {
   console.log("req.body in recommend", req.body);
   console.log("req.user in recommend", req.user);
-  const result = await Article.recommend(
-    req.body.articleSlug,
-    req.user.data.userId
-  );
+  const result = await Article.recommend(req.body.articleSlug);
   console.log("recommend result", result);
   const recomArticle = result.recomSameCat.concat(result.recomNewest);
   let data = {
@@ -187,10 +181,8 @@ const recommend = async (req, res) => {
 const comment = async (req, res) => {
   console.log("req.body in recommend", req.body);
   console.log("req.user in recommend", req.user);
-  const result = await Article.comment(
-    req.body.articleSlug,
-    req.user.data.userId
-  );
+
+  const result = await Article.comment(req.body.articleSlug);
   result.comment.forEach((e) => {
     e.replyArr = [];
   });
@@ -216,16 +208,17 @@ const comment = async (req, res) => {
 const saveHistory = async (req, res) => {
   console.log("req.user", req.user);
   console.log("controller slug", req.params.slug);
-  const result = await Article.saveHistory(
-    req.user.data.userId,
-    req.params.slug
-  );
-  console.log("saveHistory result", result);
-  var options = {
-    root: path.join(__dirname, "../../public/views/articles"),
-  };
-  res.sendFile("show_test.html", options);
-  // res.json("wtf");
+  if (req.user) {
+    const result = await Article.saveHistory(
+      req.user.data.userId,
+      req.params.slug
+    );
+
+    console.log("saveHistory result", result);
+  }
+
+  res.render("articles/show_test");
+
   // 不加 next() 就可以正常運作
   // next();
 };
@@ -245,6 +238,14 @@ const savetocollection = async (req, res) => {
   res.status(200).json("all good");
 };
 
+const unchecked = async (req, res) => {
+  const collectionId = req.body.collectionId;
+  const articleId = req.body.articleId;
+  const userId = req.user.data.userId;
+  const result = await Article.unchecked(collectionId, articleId, userId);
+  res.status(200).json(result);
+};
+
 const newComment = async (req, res) => {
   console.log("req.body in newComment", req.body);
   console.log("req.user in newComment", req.user);
@@ -261,8 +262,6 @@ const newComment = async (req, res) => {
   res.status(200).json(result);
 };
 const likeBtn = async (req, res) => {
-  console.log("req.body in newComment", req.body);
-  console.log("req.user in newComment", req.user);
   var datetime = new Date().today() + " @ " + new Date().timeNow();
   console.log(datetime);
   const result = await Article.likeBtn(
@@ -273,6 +272,67 @@ const likeBtn = async (req, res) => {
   console.log("result in newComment", result);
   res.status(200).json(result);
 };
+
+const clickedBtn = async (req, res) => {
+  const result = await Article.clickedBtn(
+    req.body.articleId,
+    req.body.category,
+    req.user.data.userId
+  );
+  res.json(result);
+};
+
+const deleteArticle = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+  if (req.user == null) {
+    res.json(-1);
+    return;
+  }
+
+  if (req.body.authorId != req.user.data.userId) {
+    res.json(-1);
+    return;
+  }
+
+  const result = await Article.deleteArticle(
+    req.user.data.userId,
+    req.body.slug
+  );
+  console.log(result);
+  if (result == -1) {
+    res.json(-1);
+  } else {
+    res.json("delete success");
+  }
+};
+
+const editArticle = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+
+  const result = await Article.editArticle(req.body.slug);
+  if (req.user.data.userId != result[0].user_id) {
+    res.json(-1);
+    return;
+  }
+  console.log(result);
+  res.json(result);
+};
+
+const history = async (req, res) => {
+  console.log("req.user", req.user);
+  console.log("req.body", req.body);
+  if (req.user) {
+    const result = await Article.history(req.user.data.userId);
+    console.log(result);
+    res.json(result);
+  } else {
+    const result = [];
+    res.json(result);
+  }
+};
+
 module.exports = {
   saveArticleAndRedirect,
   getArticles,
@@ -283,6 +343,12 @@ module.exports = {
   comment,
   saveHistory,
   savetocollection,
+  unchecked,
   newComment,
   likeBtn,
+  clickedBtn,
+  deleteArticle,
+  editArticle,
+  history,
+  indexArticles,
 };

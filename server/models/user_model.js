@@ -13,7 +13,8 @@ const createUser = async (
   name,
   email,
   hashedPassword,
-  url_id
+  url_id,
+  profile_pic
 ) => {
   const conn = await pool.getConnection();
   try {
@@ -28,8 +29,8 @@ const createUser = async (
     }
 
     const [result] = await conn.query(
-      "INSERT INTO user_info (user_created_date,name, email, password,url_id) VALUES (?,?,?,?,?)",
-      [created_date, name, email, hashedPassword, url_id]
+      "INSERT INTO user_info (user_created_date,name, email, password,url_id,profile_pic) VALUES (?,?,?,?,?,?)",
+      [created_date, name, email, hashedPassword, url_id, profile_pic]
     );
     await conn.query("COMMIT");
     return result;
@@ -38,7 +39,7 @@ const createUser = async (
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -57,7 +58,7 @@ const authLogIn = async (email, hashedPassword) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -76,7 +77,7 @@ const storeToken = async (accessToken, userEmail) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -100,7 +101,7 @@ const userArticle = async (user) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -142,7 +143,7 @@ const userChannel = async (url_id) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -160,9 +161,15 @@ const subscribe = async (type, articleslug, userId) => {
         "insert into subscription (channel_user_id,user_id) values (?,?)",
         [channel_user_id, userId]
       );
+      await conn.query(
+        `update user_info set sub_count = sub_count + 1 where user_id = ${channel_user_id}`
+      );
     } else if (type == "unsubscribe") {
       [subResult] = await conn.query(
         `delete from subscription where channel_user_id = ${channel_user_id} and user_id = ${userId}`
+      );
+      await conn.query(
+        `update user_info set sub_count = sub_count - 1 where user_id = ${channel_user_id}`
       );
     }
     await conn.query("commit");
@@ -172,7 +179,7 @@ const subscribe = async (type, articleslug, userId) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -191,7 +198,7 @@ const newcollection = async (userId, collectionName) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -209,7 +216,7 @@ const channelCoverImg = async (userId, coverImgUrl) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -227,7 +234,7 @@ const profilePic = async (userId, coverImgUrl) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -246,7 +253,7 @@ const changedescription = async (userId, channelName, description) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -264,7 +271,7 @@ const findUser = async (userId) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 
@@ -278,7 +285,7 @@ const collectionList = async (userId) => {
     let collectionList = {};
     for (let i = 0; i < result.length; i++) {
       const [result2] = await conn.query(
-        `select * from collection_intermediate as a left join articles as b on a.article_id = b.article_id where collection_id = ${result[i].collection_id}`
+        `select * from collection_intermediate as a left join articles as b on a.article_id = b.article_id left join user_info as c on b.user_id = c.user_id where collection_id = ${result[i].collection_id}`
       );
       collectionList[result[i].collection_name] = result2;
     }
@@ -289,7 +296,7 @@ const collectionList = async (userId) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
   }
 };
 const channelAuth = async (userUrl) => {
@@ -306,7 +313,39 @@ const channelAuth = async (userUrl) => {
     console.log(error);
     return -1;
   } finally {
-    await conn.release();
+    conn.release();
+  }
+};
+
+const subscription = async (userId) => {
+  const conn = await pool.getConnection();
+  try {
+    const [result] = await conn.query(
+      `select * from subscription as a left join user_info as b on a.channel_user_id = b.user_id where a.user_id = ${userId}`
+    );
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    conn.release();
+  }
+};
+
+const getuser = async (userId) => {
+  const conn = await pool.getConnection();
+  try {
+    const [result] = await conn.query(
+      `select * from user_info where user_id = ${userId}`
+    );
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    conn.release();
   }
 };
 module.exports = {
@@ -325,4 +364,6 @@ module.exports = {
   findUser,
   collectionList,
   channelAuth,
+  subscription,
+  getuser,
 };

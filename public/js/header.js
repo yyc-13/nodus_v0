@@ -23,6 +23,23 @@ document.onkeydown = function (ev) {
   }
 };
 
+fetch("/user/getuser", {
+  method: "get",
+  credentials: "include",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+  .then((res) => {
+    return res.json();
+  })
+  .then((json) => {
+    console.log("header json", json);
+    document
+      .querySelector(".menu-channel-icon")
+      .setAttribute("src", json[0].profile_pic);
+  });
+
 function searchFunc() {
   try {
     let searchInput = document.querySelector(".search-input").value;
@@ -32,11 +49,10 @@ function searchFunc() {
     console.log(searchInput);
     const searchParams = searchInput.join("+");
     console.log(searchParams);
-    let baseURL = "https://nodus.app";
+
     // 之後可以把 baseURL 放在 env 裡，讓 ec2 也可以直接用
     console.log("我要轉跳囉");
-    window.location.href =
-      `${baseURL}` + "/search" + "/keywords" + "?search_query=" + searchParams;
+    window.location.href = "/search" + "/key" + "?q=" + searchParams;
   } catch (err) {
     console.log(err);
   }

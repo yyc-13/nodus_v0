@@ -12,6 +12,12 @@ const {
   savetocollection,
   newComment,
   likeBtn,
+  clickedBtn,
+  deleteArticle,
+  editArticle,
+  history,
+  indexArticles,
+  unchecked,
 } = require("../controllers/article_controller");
 
 const Article = require("../models/article_model");
@@ -22,10 +28,15 @@ const upload = multer({ dest: "uploads/" });
 
 const { authentication } = require("../../util/util");
 const article_model = require("../models/article_model");
+const { Z_PARTIAL_FLUSH } = require("zlib");
 
 // render 區域
 router.route("/newmd").get((req, res) => {
   res.render("articles/newmd_f", { article: "", firstTime: 1 });
+});
+
+router.route("/edit/:slug").get(function (req, res) {
+  res.render("articles/newmd_f", { article: "", firstTime: "1" });
 });
 
 router
@@ -39,8 +50,7 @@ router.route("/editorjs").get((req, res) => {
 // api 區域
 router.route("/getArticle").get(authentication(), getArticles); //api
 router.route("/article").post(showArticle);
-
-router.get("/:slug", authentication(), saveHistory);
+router.route("/history").get(authentication(), history);
 
 // 文章瀏覽頁面的 api
 router.route("/articleshowArticle").post(authentication(), articleshowArticle);
@@ -48,8 +58,14 @@ router.route("/user").post(authentication(), user);
 router.route("/recommend").post(authentication(), recommend);
 router.route("/comment").post(authentication(), comment);
 router.route("/savetocollection").post(authentication(), savetocollection);
+router.route("/unchecked").post(authentication(), unchecked);
 router.route("/newComment").post(authentication(), newComment);
 router.route("/likeBtn").post(authentication(), likeBtn);
+router.route("/clickedBtn").post(authentication(), clickedBtn);
 // router.route("saveList").get(saveList);
+router.route("/delete").post(authentication(), deleteArticle);
+router.route("/edit").post(authentication(), editArticle);
+router.route("/indexArticles").get(authentication(), indexArticles);
+router.get("/:slug", authentication(), saveHistory);
 
 module.exports = router;

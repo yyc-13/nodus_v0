@@ -14,7 +14,7 @@ const bodyParser = require("body-parser");
 // create application/json parser
 const cookieParser = require("cookie-parser");
 
-const { authentication } = require("./util/util");
+const { authentication, serverApi } = require("./util/util");
 const user_model = require("./server/models/user_model");
 
 // 照片上傳相關
@@ -79,6 +79,8 @@ app.use("/search", searchRouter);
 
 app.get("/", getArticles);
 
+// app.get("/unsplash-proxy", serverApi);
+
 // 照片上傳 api
 app.post(
   "/images",
@@ -88,7 +90,15 @@ app.post(
     console.log("req.user", req.user);
     console.log("req.body", req.body);
     // 註明 s3 要放的資料夾
-
+    console.log("req.file");
+    if (req.body.coverPhotoType == "unsplash") {
+      res.send({ imagePath: req.body.coverPHoto });
+      return;
+    }
+    if (!req.file) {
+      res.send({ imagePath: "" });
+      return;
+    }
     const file = req.file;
     console.log("file", file);
 
@@ -120,7 +130,23 @@ app.post(
     }
   }
 );
+app.use(function (req, res, next) {
+  res.status(404);
+  // respond with html page
+  if (req.accepts("html")) {
+    res.render("404", { url: req.url });
+    return;
+  }
 
+  // respond with json
+  if (req.accepts("json")) {
+    res.json({ error: "Not found" });
+    return;
+  }
+
+  // default to plain-text. send()
+  res.type("txt").send("Not found");
+});
 const port = 3000;
 app.listen(port, () => {
   console.log(`Nodus listening on port ${port}`);

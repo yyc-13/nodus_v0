@@ -2,54 +2,26 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-  <title>User Channel</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <style>
+    .menu-channel-icon {
+      border-radius: 50%;
+      width: 2.25em;
+      background-color: olive;
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
 
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <!-- Core theme CSS (includes Bootstrap)-->
-  <link href="../../styles/manageProfile.css" rel="stylesheet" />
-
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-bottom/">
-
-  <link href="../../styles/sidebars.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../styles/header.css">
   </link>
   <style>
-    .card-title {
-      display: -webkit-box;
-
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow-wrap: anywhere;
-      overflow: hidden;
-    }
-
-    .card-text {
-      display: -webkit-box;
-
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow-wrap: anywhere;
-      overflow: hidden;
-    }
-
-    .articleImage {
-      max-width: 100%;
-      max-height: 100%;
-    }
-
-    .coverPhoto {
-      border-radius: 15 px;
-      margin-top: 100 px;
-      background-image: url(http://unsplash.it/1000/500?gravity=center);
-      height: 340 px;
-      width: 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+    .swal2-popup {
+      width: auto !important;
     }
 
     .sidebar {
@@ -68,23 +40,8 @@
       /* 用此屬性控制縮放 */
     }
 
-    .swal2-popup {
-      width: auto !important;
-    }
-
     .show-sidebar {
       transform: translate(0);
-    }
-
-    #coverPhoto {
-      border-radius: 10px;
-      margin-top: 100px;
-      background-image: url('https://source.unsplash.com/wfh8dDlNFOk/1600x900');
-
-      width: 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
     }
 
     .container {
@@ -135,17 +92,12 @@
       white-space: nowrap;
     }
 
-    a {
-      text-decoration: none !important;
-    }
-
     div.scrollmenu a {
       display: inline-block;
 
       text-align: center;
       padding: 14px;
       text-decoration: none;
-
       border-right: inset #ACC0D8 1px;
     }
 
@@ -189,13 +141,6 @@
       color: #f1f1f1;
     }
 
-    #userProfilePicture {
-      background-repeat: no-repeat;
-      background-position: center;
-      background-image: url("https://dummyimage.com/1000x1000/6c757d/dee2e6.jpg");
-      background-size: cover;
-    }
-
     /* Main content */
     .main {
       margin-left: 200px;
@@ -226,31 +171,57 @@
 
     /*  */
     /* sidebar 縮放功能 */
+    .card-text {
+      display: -webkit-box;
+      max-width: 200px;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow-wrap: anywhere;
+      overflow: hidden;
+    }
 
     a {
 
       text-decoration: none;
     }
   </style>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
-  <script src="https://kit.fontawesome.com/0a41841954.js" crossorigin="anonymous"></script>
-  <!-- google 的 Jqeury CDN -->
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+  <link rel="stylesheet"
+    href="https://rawcdn.githack.com/darkterminal/tagin/6fa2863c13aa1841f33cf6dcbbf266c92fbf5412/dist/css/tagin.min.css">
 
+  <link rel="stylesheet" href="../../styles/index.css">
+  <style>
+    .article-container {
+      margin-top: 66px;
+    }
+
+    h1 {
+      margin-top: 5px;
+    }
+
+    #articleContainer {
+      align-items: unset;
+      flex-wrap: unset;
+    }
+
+    .bodyWrapper {
+      min-height: calc(100vh);
+    }
+  </style>
+  <link rel="stylesheet" href="../../styles/header.css">
+  <link rel="stylesheet" href="../../styles/sidebars.css">
 </head>
 
 <body>
+  <!-- header -->
   <nav class="
-      navbar navbar-expand-sm
-      fixed-top
-      navbar-dark
-      bg-dark
-      d-flex
-      justify-content-end
-      mb-5
-    " style="height: 65px">
+    navbar navbar-expand-sm
+    fixed-top
+    navbar-dark
+    bg-dark
+    d-flex
+    justify-content-end
+    mb-5
+  " style="height: 65px">
     <button type="button" class="btn btn-secondary sidebar-toggle"
       style="margin-left: 40px; background-color: transparent">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
@@ -282,7 +253,9 @@
       <img class="menu-channel-icon" src="../../images/profileDefault.png" style="max-width: 100%; max-height: 100%;" />
     </a>
   </nav>
-  <div class="row" style="width:100%">
+  <!-- header 下的 body -->
+  <div class="row bodyWrapper" style="width:100%">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
       <symbol id="bootstrap" viewBox="0 0 118 94">
         <title>Bootstrap</title>
@@ -427,13 +400,7 @@
             </svg>
             收藏清單
           </a>
-          <div class="dropdown-container 1">
-            <ul>
-              <li><a href="#" style="color:white; text-decoration: none;">Link 1</a></li>
-              <li><a href="#" style="color:white; text-decoration: none;">Link 2</a></li>
-              <li><a href="#" style="color:white; text-decoration: none;">Link 3</a></li>
-            </ul>
-          </div>
+
         </li>
 
         <li>
@@ -441,7 +408,7 @@
             <svg class="bi me-2" width="16" height="16">
               <use xlink:href="#people-circle" />
             </svg>
-            用戶文章
+            你的文章
           </a>
         </li>
       </ul>
@@ -449,86 +416,9 @@
       <button class="w3-button w3-teal logout">登出</button>
 
     </div>
-    <div class="col w3-container">
 
-      <header class="py-5 bg-image-full ms-2" id="coverPhoto">
-        <div class="row my-5">
-          <div class="ms-4 col-3 d-flex flex-column justify-content-end">
-            <label class="btn btn-info ownerOnly">
-              <input id="coverPhotoBtn" name="coverPhoto" style="display:none;" type="file">
-              <i class="fa fa-photo"></i> 更新封面照片
-            </label>
-          </div>
-
-          <div class="col-3 d-flex flex-column justify-content-center align-items-center">
-            <div style="height:160px; width:160px" class="rounded-circle overflow-hidden" id="userProfilePicture">
-              <!-- <img class=" w-100 mb-4 mx-auto  " id="profilePicture"
-                src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" style="height:160px" alt="..." /> -->
-            </div>
-            <!-- <form
-                    action="/user/changepicture"
-                    method="post"
-                    enctype="multipart/form-data"
-                    class="d-flex flex-column justify-content-center"
-                  > -->
-            <!-- 有文件上傳時，一定要用 multipart/form-data -->
-            <h2 class="text-white" id="userName">user name</h2>
-            <label class="btn btn-info ownerOnly">
-              <input id="profilePictureBtn" style="display:none;" type="file" name="coverPhoto">
-              <i class=" fa fa-photo"></i> 更新照片
-            </label>
-
-
-            <!-- </form> -->
-
-          </div>
-
-          <div class="col mt-3">
-            <h1 class="text-white fs-3 fw-bolder" id="channelTitle">頻道標題</h1>
-            <p class="text-white-50 mb-0" id="channelDescription">
-              頻道內容
-            </p>
-
-            <button class="btn btn-primary mt-2 ownerOnly" type="button" data-bs-toggle="collapse"
-              data-bs-target="#channelIntro" aria-expanded="false" aria-controls="channelIntro">
-              更新頻道介紹
-            </button>
-
-
-            <div class="collapse" id="channelIntro">
-              <header class="w3-container w3-teal w-100" style="height:30px"></header>
-              <div class="card card-body">
-                <form action="/user/changedescription" method="post" class="d-flex flex-column">
-                  <label></label>
-                  <b> 頻道名稱</b>
-                  <input type="text" name="channelName" />
-                  </label>
-                  <label for="descriptionTextarea"> <b> 頻道介紹</b></label>
-                  <textarea name="description" id="descriptionTextarea" rows="5"></textarea>
-                  <button type="submit">提交</button>
-                </form>
-              </div>
-              <footer class="w3-container w3-teal w-100" style="height: 30px;">
-                <p>@Nodus</p>
-              </footer>
-            </div>
-          </div>
-          <div class="col-1"></div>
-        </div>
-      </header>
-      <div class="w3-border-bottom mt-5">
-        <h2 class="w3-text-blue-gray ms-5">你的文章</h2>
-      </div>
-      <section>
-        <div class="mt-2 col-12 container d-flex flex-row justify-content-evenly" id="articleContainer">
-
-
-        </div>
-
-      </section>
-    </div>
   </div>
-
+  <!-- footer -->
   <nav class="
       footer
       mt-auto
@@ -549,237 +439,18 @@
     </div>
   </nav>
 
-
-
-
-
-  <!-- Core theme JS-->
-  <script>
-    let userApiBody = {}
-    const fullUrl = window.location.href
-    const userUrl = fullUrl.substring(fullUrl.lastIndexOf("/") + 1)
-    userApiBody.userUrl = userUrl
-    fetch("/user/channelAuth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(userApiBody)
-    }).then((res) => res.json()).then((json) => {
-      console.log("json", json)
-      if (json !== 1) {
-        const ownerOnlyArr = document.querySelectorAll(".ownerOnly")
-        ownerOnlyArr.forEach(e => {
-          e.setAttribute("class", "d-none")
-        })
-      }
-    })
-  </script>
-  <script>
-    // https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
-    function dynamicallyLoadScript(url) {
-      var script = document.createElement("script"); // create a script DOM node
-      script.src = url; // set its src to the provided URL
-
-      document.head.appendChild(script); // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead)
-    }
-
-    dynamicallyLoadScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js");
-    // 更新頻道照片
-    $("#profilePicture").change(function () {
-      const profilePicture = $(this).files[0]
-    })
-    // 做到一半 走 multer s3 
-
-    const coverBtn = document.querySelector("#coverPhotoBtn")
-    coverBtn.addEventListener("change", async (e) => {
-      try {
-        const formData = new FormData()
-        formData.append("coverPhoto", coverBtn.files[0])
-        formData.append("s3ImageRoute", "channelCover")
-        formData.append("description", "handWriteDescription")
-        // const result = await axios.post("/images", formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-        fetch("/images", {
-          method: "POST",
-          credentials: "include",
-          body: formData
-        }).then((res) => {
-          return res.json();
-        }).then((json) => {
-          console.log("coverBtn json", json)
-          location.reload()
-        })
-
-      } catch (err) {
-        console.log(err)
-      }
-    })
-
-    const profilePicBtn = document.querySelector("#profilePictureBtn")
-    profilePicBtn.addEventListener("change", async (e) => {
-      try {
-        const formData = new FormData()
-        formData.append("coverPhoto", profilePicBtn.files[0])
-        formData.append("s3ImageRoute", "profilePic")
-        fetch("/images", {
-          method: "POST",
-          credentials: "include",
-          body: formData
-        }).then((res) => {
-          return res.json()
-        }).then((json) => {
-          console.log("profilePic json", json)
-          location.reload()
-        })
-      } catch (err) {
-        console.log(err)
-      }
-    })
-
-
-
-  </script>
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
 
-  <script src="../../js/sidebars.js"></script>
-  <script>
-    const fullUrl2 = window.location.href
-    const channelUrlId = fullUrl2.substring(fullUrl2.lastIndexOf("/") + 1)
-    let channelApiBody = {}
-    channelApiBody.url_id = channelUrlId
-
-    fetch("/user/userChannel", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(channelApiBody)
-    }).then((res) => res.json()).then((json) => {
-      console.log("userChannel json", json)
-      const channel = json.userResult[0]
-      $("#userName").html(channel.name)
-      $("#channelTitle").text(channel.channelTitle)
-      $("#channelDescription").text(channel.channelDescription)
-      if (channel.profile_pic) {
-        $("#profilePicture").attr("src", channel.profile_pic)
-      }
-      if (channel.coverPhoto) {
-        $("#coverPhoto").attr("style", `background-image: url(${channel.coverPhoto})`)
-      }
-      if (channel.profile_pic) {
-        $("#userProfilePicture").css("background-image", `url(${channel.profile_pic})`)
-        console.log("1")
-        // $("#profilePicture").attr("src", channel.profile_pic)
-      }
-      json.articleResult.forEach(e => {
-        const articleBox = document.createElement("div")
-        articleBox.setAttribute("class", " box col-6")
-        e.content_html = e.content_html.replace(/(<([^>]+)>)/gi, "")
-        articleBox.innerHTML = `        <div class="w3-margin row w3-border-bottom g-0 bg-light position-relative" style="height:300px">
-          <div class="col-md-6 mb-md-0 p-md-4 col-3">
-
-            <a href="/articles/${e.slug}"><div style="height:220px; width:220px;background-repeat:no-repeat;background-position:center;background-image:url(${e.cover_images});background-size:cover;"> </div></a>
-          </div>
-        
-          <div class="col-3 col-md-6 p-4 ps-md-0">
-            <a href="/articles/${e.slug}">
-            <h5 class="card-title mt-0">${e.title}</h5>
-            </a>
-            <a href="/user/${json.userResult[0].url_id}" id="recomAuthorChannelLink">
-              <h6 class="text-secondary">${json.userResult[0].name}<br>${e.article_created_date}</h6>
-            </a>
-            <a href="/arcticles/${e.slug}" class="text-black">
-            <p class="card-text">
-              ${e.content_html}
-            </p>
-            </a>
-            <div class="mt-2">
-                  <button class="editBtn ownerOnly w3-btn w3-ripple w3-teal " id="${e.slug}" data-authorId ="${e.user_id}">編輯</button>
-      <button class="deleteBtn ownerOnly w3-btn w3-ripple w3-red" id="${e.slug}" data-authorId ="${e.user_id}">刪除</button></div>
-          </div>
-        </div>`
-        $("#articleContainer").append(articleBox)
-      });
-      console.log("fetch")
-    }).then(() => {
-      document.querySelectorAll(".deleteBtn").forEach((e) => {
-        const slug = e.getAttribute("id")
-        const authorId = e.getAttribute("data-authorid");
-
-        e.addEventListener("click", (event) => {
-
-          console.log(3)
-
-
-          Swal.fire({
-            title: '確定要刪除文章?',
-
-            showCancelButton: true,
-            confirmButtonText: '刪除',
-            denyButtonText: `取消`,
-          }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-
-              const url = "/articles/delete"
-              const article = { slug: slug, authorId: authorId }
-              console.log("article", article)
-              fetch(url, {
-                method: "post",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(article)
-              })
-                .then((res) => res.json).then((json) => {
-                  console.log("json", json)
-                  if (json == -1) {
-                    Swal.fire("您沒有權限刪除這篇文章")
-                  } else {
-                    Swal.fire("已刪除文章").then(() => {
-                      location.reload()
-                      return
-                    })
-                  }
-                })
-            }
-          })
-        })
-      })
-      // })
-
-    }).then(() => {
-      document.querySelectorAll(".editBtn").forEach((e) => {
-        const slug = e.id
-        const authorId = e.getAttribute("data-authorId")
-        e.addEventListener("click", (event) => {
-          Swal.fire({
-            title: '確定要編輯文章?',
-
-            showCancelButton: true,
-            confirmButtonText: '編輯',
-            denyButtonText: `取消`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.href = `/articles/edit/${slug}`
-            }
-
-          })
-
-        })
-
-        // e.addEventListener("click", ())
-      })
-    })
-  </script>
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script
+    src="https://rawcdn.githack.com/darkterminal/tagin/6fa2863c13aa1841f33cf6dcbbf266c92fbf5412/dist/js/tagin.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
 
-  </script>
   <script src="../../js/sidebars.js"></script>
   <script src="../../js/header.js"></script>
 </body>

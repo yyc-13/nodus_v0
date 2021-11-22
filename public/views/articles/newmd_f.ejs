@@ -11,8 +11,10 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
-  <link href="../styles/sidebars.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   </link>
+  <link rel="stylesheet" href="../../styles/unsplashSearch.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     .swal2-popup {
       width: auto !important;
@@ -39,9 +41,9 @@
     }
 
     .container {
-      margin-top: 80px;
-      flex-direction: row;
-      justify-content: flex-start;
+      margin-top: 90px;
+
+
       align-items: flex-start;
       flex-wrap: wrap;
       align-content: flex-start;
@@ -205,7 +207,9 @@
   <%- include("../components/header")%>
     <div class="row" style="width:100%">
       <%- include("../components/sidebar") %>
-        <div class="col-10 container d-flex flex-row justify-content-center position-relative">
+        <div
+          class="w3-card-4  col-10 container d-flex flex-row justify-content-center position-relative w3-margin-bottom"
+          style="width:80%;border-radius:15px">
           <form id="articleForm">
             <div id="articleContainer" class="
                     container
@@ -214,19 +218,19 @@
                     justify-content-center
                     article-container
                   ">
-              <h1>新增文章</h1>
+              <h1>新增文章 </h1>
               <div class="form-floating mb-2 mt-2">
                 <textarea name="title" class="form-control title" placeholder="Leave a comment here"
                   id="floatingTextarea"></textarea>
-                <label for="floatingTextarea">文章標題</label>
+                <label for="floatingTextarea">文章標題*</label>
               </div>
               <div class="form-floating">
-                <h3 class="my-2">文章內容</h3>
-                <textarea name="markdown" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                  style="height: 400px"></textarea>
+                <h3 class="my-2">文章內容*</h3>
+                <textarea name="markdown" class="form-control articleContent" placeholder="Leave a comment here"
+                  id="floatingTextarea2" style="height: 400px"></textarea>
                 <label for="floatingTextarea2"></label>
               </div>
-              <div class="form-floating">
+              <div class="form-floating d-none">
                 <h3 class="my-2">文章簡介（置於縮圖上）</h3>
                 <textarea name="markdown" class="form-control" placeholder="Leave a comment here" id="description"
                   style="height: 100px"></textarea>
@@ -237,10 +241,9 @@
             <div class="my-4 d-flex flex-row article-container container justify-content-center align-items-stretch">
               <!-- 分類看板選單 -->
               <div class="container col-3 lead border p-3 mt-3">
-                <label for="category" class="form-label">分類看板</label><br>
-                <!-- <input class="form-control" list="categoryOptions" id="category" placeholder="選擇分類看板" name="category"
-                      required /> -->
-                <select id="category" style="width:100px">
+                <label for="category" class="form-label mb-0">分類看板*</label><br>
+                <hr class="mt-1 mb-3">
+                <select class="w3-border-top" name="category" id="category" style="width:100px">
                   <option value="生活">生活</option>
                   <option value="娛樂">娛樂</option>
                   <option value="時尚">時尚</option>
@@ -263,7 +266,9 @@
               <!--  -->
               <!-- tag 選單 -->
               <div class="container col-3 lead border p-3 mt-3">
-                <label for="tag" class="form-label">新增標籤（Tag） <br>按空白鍵新增 </label>
+                <label for="tag" class="form-label ">新增標籤（Tag）*
+                  <hr class="mt-1 m-0">按空白鍵新增
+                </label>
 
                 <input type="text" list="tagOptions" id="tag" placeholder="新增 Tag" name="tags"
                   class="form-control tagin" data-separator=" " value="">
@@ -271,8 +276,20 @@
               </div>
 
               <div class="container col-3 lead border p-3 mt-3">
-                <label for="articleCover" class="form-label">文章封面照片 <input class="form-control" type="file"
-                    id="articleCover" placeholder="新增文章封面照片" required /></label>
+                <label for="articleCover" class="form-label ">文章封面照片*
+                  <hr class="mt-1">
+                  <input class="form-control" type="file" id="articleCover" placeholder="新增文章封面照片" />
+                </label>
+                <div>
+                  <button class="btn-unsplash" id="showUnsplash">使用
+                    Unsplash 圖庫</button>
+                </div>
+                <div class="d-flex justify-content-center w3-margin">
+                  <div id="imgPreview" style="width:306px;height:306px;background-repeat:no-repeat;
+                background-position: center;
+                
+                background-size: cover;"></div>
+                </div>
               </div>
               <div class="
                       d-flex
@@ -287,12 +304,43 @@
                 <button class="flex-grow-1 btn btn-secondary" id="uploadBtn">上傳！</button>
               </div>
           </form>
+          <main>
+            <div id="id01" class="w3-modal">
+              <div class="w3-modal-content">
+                <div class="container w3-card-4" style="margin-top: 20px;border-radius:10px;min-height: 80vh;">
+                  <h1 class="h1">搜尋 Unsplash 照片</h1>
+
+                  <form class="js-form">
+                    <input type="textt" class="search-input-us js-search-input" placeholder="搜尋圖片" autofocus>
+                    <button type="submit" class="btn-unsplash-go">Go</button>
+                  </form>
+
+                  <div class="result-stats js-result-stats"></div>
+                  <hr style="width: 50%;margin:auto">
+                  <ul class="search-results js-search-results d-flex flex-wrap" style="margin:0 -8px -8px 0"
+                    id="imgContainer">
+                  </ul>
+
+                  <div class="pagination justify-content-center">
+                    <button class="hidden prev-btn js-prev"><a
+                        style="text-decoration: none; color: white;">上一頁</a></button>
+                    <button class="hidden next-btn js-next"><a
+                        style="text-decoration: none; color: white;">下一頁</a></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="spinner js-spinner hidden">
+              <div class="double-bounce1"></div>
+              <div class="double-bounce2"></div>
+            </div>
+          </main>
         </div>
     </div>
 
     <!-- footer -->
     </div>
-    <input type="text" name="tags" class="form-control tagin" data-separator=" " value="">
+
     <% if(firstTime) {%>
       <span id="firstTime" class="d-none">
         <%= firstTime %>
@@ -334,9 +382,12 @@
 
             })
           </script>
+
+
           <script src="../../js/newmd_f.js"></script>
           <script src="../../js/sidebars.js"></script>
           <script src="../../js/header.js"></script>
+          <script src="../../js/unsplashSearch.js"></script>
 </body>
 
 </html>

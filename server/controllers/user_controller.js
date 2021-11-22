@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const userModel = require("../models/user_model");
 const bcrypt = require("bcrypt");
-
+const path = require("path");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
@@ -15,6 +15,12 @@ const { ACCESS_TOKEN_SECRET } = process.env; // 30 days by seconds
 
 // 從 app.use 改成 router.use，因為這邊 express 建立的是 router
 router.use(bodyParser.urlencoded({ extended: false }));
+
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "60000000000",
+  });
+}
 
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -30,7 +36,7 @@ const userLogin = async (req, res) => {
   const result = await userModel.authLogIn(email, hashedPassword);
 
   if (result.length < 1) {
-    res.send("Sorry, can't find user.");
+    res.json("請輸入正確的 Email 和密碼");
   } else {
     const userData = {
       created_date: result[0].created_date,
@@ -45,11 +51,12 @@ const userLogin = async (req, res) => {
     console.log(userOutput);
     const accessToken = generateAccessToken(userOutput);
     await userModel.storeToken(accessToken, result[0].email);
+    const user_info = await userModel.findUser(result[0].user_id);
 
     dataData = {
       accessToken: accessToken,
       access_expired: 600000,
-      user: userData,
+      user: user_info,
     };
     res.cookie("accessToken", accessToken, {
       path: "/",
@@ -73,15 +80,17 @@ const userRegister = async (req, res) => {
     Math.random().toString().substr(3) + Date.now()
   ).toString(36);
   console.log("url_id", url_id);
+  const created_date = new Date().today() + " @ " + new Date().timeNow();
   const result = await userModel.createUser(
-    Date.now().toString(),
+    created_date,
     name,
     email,
     hashedPassword,
-    url_id
+    url_id,
+    "https://nodus.s3.ap-southeast-1.amazonaws.com/default_profile.jpeg"
   );
   const userData = {
-    created_date: Date.now().toString(),
+    created_date: created_date,
     name: name,
     email: email,
     hashedPassword: hashedPassword,
@@ -123,21 +132,6 @@ const userArticle = async (req, res) => {
   return;
 };
 
-const userProfile = async (req, res) => {};
-
-// function authenticateToken(req, res, next) {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
-//   if (token == null) return res.sendStatus(401);
-
-//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-//     console.log(err);
-//     if (err) return res.sendStatus(403);
-//     req.user = user;
-//     next();
-//   });
-// }
-
 const profileOrSignIn = async (req, res) => {
   if (req.signedCookies.accessToken) {
     const accessToken = req.signedCookies.accessToken;
@@ -148,27 +142,20 @@ const profileOrSignIn = async (req, res) => {
       const result = await userModel.findUser(user.data.userId);
       console.log(result);
       res.redirect(`/user/${result[0].url_id}`);
-      res.render("profile.ejs", { articles: [] });
+      // res.render("profile.ejs", { articles: [] });
     } catch (err) {
       console.error(err);
       res.redirect("/");
       // 之後改成用 ejs render 的路徑
     }
   } else {
-    res.render("userSign");
+    var options = {
+      root: path.join(__dirname, "../../public/views"),
+    };
+    res.render("loginSignup");
     return;
   }
 };
-
-if (Array.length > 1) {
-  getArticles.foreach((article) => {});
-}
-
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "60000000000",
-  });
-}
 
 const userChannel = async (req, res) => {
   console.log("req.user", req.user);
@@ -229,11 +216,14 @@ const changedescription = async (req, res) => {
 };
 
 const collectionList = async (req, res) => {
-  console.log("req.user", req.user);
-
-  const result = await userModel.collectionList(req.user.data.userId);
-  console.log("result", result);
-  res.json(result);
+  if (req.user) {
+    const result = await userModel.collectionList(req.user.data.userId);
+    console.log("result", result);
+    res.json(result);
+  } else {
+    const result = [];
+    res.json(result);
+  }
 };
 
 const channelAuth = async (req, res) => {
@@ -247,11 +237,31 @@ const channelAuth = async (req, res) => {
   }
 };
 
+const subscription = async (req, res) => {
+  if (!req.user) {
+    res.json(-1);
+    return;
+  }
+  const result = await userModel.subscription(req.user.data.userId);
+  console.log(result);
+  res.json(result);
+};
+
+const getuser = async (req, res) => {
+  if (!req.user) {
+    res.json(-1);
+    return;
+  }
+  const result = await userModel.getuser(req.user.data.userId);
+  console.log(result);
+  res.json(result);
+};
+
 module.exports = {
   userArticle,
   userLogin,
   userRegister,
-  userProfile,
+
   profileOrSignIn,
   userChannel,
   subscribe,
@@ -260,4 +270,6 @@ module.exports = {
   changedescription,
   collectionList,
   channelAuth,
+  subscription,
+  getuser,
 };

@@ -1,8 +1,18 @@
 require("dotenv").config();
 
+const createApi = require("unsplash-js").createApi;
+
 const User = require("../server/models/user_model");
-const { ACCESS_TOKEN_SECRET } = process.env; // 30 days by seconds
+
 const jwt = require("jsonwebtoken");
+
+const { ACCESS_TOKEN_SECRET, UNSPLASH_ACCESS_KEY, UNSPLASH_SECRET_KEY } =
+  process.env; // 30 days by seconds
+// on your node server
+const serverApi = createApi({
+  accessKey: UNSPLASH_ACCESS_KEY,
+  //...other fetch options
+});
 
 const verifyJwt = (token) => {
   async () => {
@@ -102,4 +112,5 @@ module.exports = {
   verifyJwt,
   authentication,
   uploadFile,
+  serverApi,
 };
