@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentPage = 1;
   let searchQuery;
 
-  const apiKey = "PZSam4mfZqYs39ABQ86KNm_M7pmtQL5OsRYAaAg1gC4"; //"Your API key";""
-
   // Get the modal
   var modal = document.getElementById("id01");
 
@@ -26,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     currentPage = 1;
     const inputValue = document.querySelector(".js-search-input").value;
     searchQuery = inputValue.trim();
-    console.log(searchQuery);
+
     fetchResults(searchQuery);
   }
 
@@ -35,16 +33,20 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const results = await searchUnsplash(searchQuery);
       pagination(results.total_pages);
-      console.log(results);
+
       displayResults(results);
     } catch (err) {
-      console.log(err);
       alert("Failed to search Unsplash");
     }
     spinner.classList.add("hidden");
   }
 
   async function searchUnsplash(searchQuery) {
+    const getKeyUrl = `/search/getunsplashapikey`;
+
+    const response1 = await fetch(getKeyUrl);
+    const apiKey = await response1.json();
+
     const endpoint = `https://api.unsplash.com/search/photos?query=${searchQuery}&per_page=30&page=${currentPage}&client_id=${apiKey}`;
     const response = await fetch(endpoint);
     if (!response.ok) {
@@ -84,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function displayResults(json) {
-    console.log("dpResult", json);
     const searchResults = document.querySelector("#imgContainer");
     searchResults.textContent = "";
     json.results.forEach((result) => {

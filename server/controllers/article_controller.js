@@ -1,14 +1,11 @@
-const AES = require("crypto-js/aes");
 const SHA256 = require("crypto-js/sha256");
 
 const marked = require("marked");
-const slugify = require("slugify");
+
 const createDomPurify = require("dompurify");
 const { JSDOM } = require("jsdom");
 const dompurify = createDomPurify(new JSDOM().window);
 const Article = require("../models/article_model");
-const util = require("../../util/util");
-const path = require("path");
 
 const saveArticleAndRedirect = async (req, res) => {
   console.log("req.user", req.user);
@@ -59,55 +56,33 @@ const saveArticleAndRedirect = async (req, res) => {
     const editResult = await Article.mdEdit(articlePack);
     console.log("editResult", editResult);
   }
-  res.send(articlePack.slug);
+  res.status(200).send(articlePack.slug);
 };
 
-const getArticles = async (req, res) => {
-  let result = await Article.getArticles();
-  result = result.reverse();
-  // strip html tag
-  result.forEach(
-    (e) => (e.content_html = e.content_html.replace(/(<([^>]+)>)/gi, ""))
-  );
-
-  if (result == -1) {
-    res.status(500);
-  } else {
-    console.log(result);
-    res.render("index_f", {
-      articles: result,
-    });
-  }
+const index = async (req, res) => {
+  res.status(200).render("index");
 };
 
 const indexArticles = async (req, res) => {
   let result = await Article.getArticles();
   result = result.reverse();
-  res.json(result);
-};
-
-const saveList = async (req, res) => {
-  console.log(req.user);
-  const user = req.user;
-  const result = await userModel.user;
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const showArticle = async (req, res) => {
   console.log(req.body);
+
   const result = await Article.searchArticles(req.body.articleId);
-  console.log(result);
-  res.json(result);
+  // res.status(200).json(req.body);
+  res.status(200).json(result);
 };
 
 const articleshowArticle = async (req, res) => {
-  console.log("req.body", req.body);
-  console.log("req.user", req.user);
   const result = await Article.searchArticles(req.body.articleSlug);
-  console.log("result", result);
+
   const article = result.articleResult[0];
   const author = result.authorResult[0];
-  console.log("ers", article);
+
   if (!author.sub_count) {
     author.sub_count = 0;
   }
@@ -131,14 +106,14 @@ const articleshowArticle = async (req, res) => {
     },
     author: author,
   };
-  res.json(data);
+  res.status(200).json(data);
 };
 
 const user = async (req, res) => {
   console.log("req.body in user", req.body);
   console.log("req.user in user", req.user);
   if (!req.user) {
-    res.json(-1);
+    res.status(400).json(-1);
     return -1;
   }
   const result = await Article.searchUser(
@@ -159,11 +134,8 @@ const user = async (req, res) => {
     userSubscribed: result.subscription,
     userAvatar: result.user[0].profile_pic,
   };
-  // 撈 user 的收藏清單
-  // 撈 user 有沒有收藏
-  // 撈 user 有沒有按讚
-  // 撈 user 的頭像名字跟 id
-  res.json(data);
+
+  res.status(200).json(data);
 };
 
 const recommend = async (req, res) => {
@@ -175,7 +147,7 @@ const recommend = async (req, res) => {
   let data = {
     recomArticle: recomArticle,
   };
-  res.json(data);
+  res.status(200).json(data);
 };
 
 const comment = async (req, res) => {
@@ -202,7 +174,7 @@ const comment = async (req, res) => {
   let data = {
     commentArr: result.comment,
   };
-  res.json(data);
+  res.status(200).json(data);
 };
 
 const saveHistory = async (req, res) => {
@@ -217,7 +189,7 @@ const saveHistory = async (req, res) => {
     console.log("saveHistory result", result);
   }
 
-  res.render("articles/show_test");
+  res.render("articles/show_article");
 
   // 不加 next() 就可以正常運作
   // next();
@@ -262,8 +234,6 @@ const newComment = async (req, res) => {
   res.status(200).json(result);
 };
 const likeBtn = async (req, res) => {
-  var datetime = new Date().today() + " @ " + new Date().timeNow();
-  console.log(datetime);
   const result = await Article.likeBtn(
     req.body.articleId,
     req.body.category,
@@ -279,19 +249,17 @@ const clickedBtn = async (req, res) => {
     req.body.category,
     req.user.data.userId
   );
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const deleteArticle = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
   if (req.user == null) {
-    res.json(-1);
+    res.status(400).json(-1);
     return;
   }
 
   if (req.body.authorId != req.user.data.userId) {
-    res.json(-1);
+    res.status(403).json(-1);
     return;
   }
 
@@ -299,43 +267,38 @@ const deleteArticle = async (req, res) => {
     req.user.data.userId,
     req.body.slug
   );
-  console.log(result);
+
   if (result == -1) {
-    res.json(-1);
+    res.status(500).json(-1);
   } else {
-    res.json("delete success");
+    res.status(200).json("delete success");
   }
 };
 
 const editArticle = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
-
   const result = await Article.editArticle(req.body.slug);
   if (req.user.data.userId != result[0].user_id) {
-    res.json(-1);
+    res.status(400).json(-1);
     return;
   }
-  console.log(result);
-  res.json(result);
+
+  res.status(200).json(result);
 };
 
 const history = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
   if (req.user) {
     const result = await Article.history(req.user.data.userId);
-    console.log(result);
-    res.json(result);
+
+    res.status(200).json(result);
   } else {
     const result = [];
-    res.json(result);
+    res.status(200).json(result);
   }
 };
 
 module.exports = {
   saveArticleAndRedirect,
-  getArticles,
+  index,
   showArticle,
   articleshowArticle,
   user,

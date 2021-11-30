@@ -34,7 +34,9 @@ fetch("/user/getuser", {
     return res.json();
   })
   .then((json) => {
-    console.log("header json", json);
+    if (json == -1) {
+      return;
+    }
     document
       .querySelector(".menu-channel-icon")
       .setAttribute("src", json[0].profile_pic);
@@ -44,18 +46,14 @@ function searchFunc() {
   try {
     let searchInput = document.querySelector(".search-input").value;
 
-    console.log(typeof searchInput);
     searchInput = searchInput.split(/\s+/);
-    console.log(searchInput);
+
     const searchParams = searchInput.join("+");
-    console.log(searchParams);
 
     // 之後可以把 baseURL 放在 env 裡，讓 ec2 也可以直接用
-    console.log("我要轉跳囉");
+
     window.location.href = "/search" + "/key" + "?q=" + searchParams;
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 }
 
 const toggleBtn = document.querySelector(".sidebar-toggle");

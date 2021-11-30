@@ -1,28 +1,22 @@
-const { param } = require("../routes/article_route");
 const { pool } = require("./mysqlcon");
 
-const searchKeywordsDB = async (paramsArr) => {
+const searchKeywords = async (params) => {
   const conn = await pool.getConnection();
   try {
-    await conn.query("START TRANSACTION");
-
-    let queryStr =
-      "SELECT * from articles where concat(title, description, content) LIKE (";
-    for (let i = 0; i < paramsArr.length; i++) {
-      if (i == 0) {
-        queryStr += `"%${paramsArr[i]}%")`;
+    let query =
+      "SELECT * from articles as a left join user_info as b on a.user_id = b.user_id where concat(title, description, content) LIKE ";
+    let queryParams = [];
+    for (param of params) {
+      if (param == params[0]) {
+        query += "(?)";
       } else {
-        queryStr += `or concat(title,description,content) LIKE("%${paramsArr[i]}%")`;
+        query += `or concat(title,description,content) LIKE (?)`;
       }
+      queryParams.push(`%${param}%`);
     }
-    console.log(queryStr);
-    const [result] = await conn.query(queryStr);
-    console.log(result);
-
-    await conn.query("COMMIT");
+    const [result] = await conn.query(query, queryParams);
     return result;
   } catch (error) {
-    await conn.query("ROLLBACK");
     console.log(error);
     return -1;
   } finally {
@@ -30,49 +24,30 @@ const searchKeywordsDB = async (paramsArr) => {
   }
 };
 
-const searchCategory = async (queryParams) => {
+const searchTag = async (params) => {
   const conn = await pool.getConnection();
   try {
-    await conn.query("START TRANSACTION");
     const [result] = await conn.query(
-      `select * from articles where category = "${queryParams}"`
-    );
-    await conn.query("COMMIT");
-    return result;
-  } catch (err) {
-    await conn.query("ROLLBACK");
-    console.log(err);
-    return -1;
-  } finally {
-    conn.release();
-  }
-};
-
-const searchTag = async (queryParams) => {
-  const conn = await pool.getConnection();
-  try {
-    console.log("asdasd", queryParams);
-    const [result] = await conn.query(
-      `select * from articles as a left join user_info as b on a.user_id = b.user_id where tag like "%${queryParams}%" `
+      `select * from articles as a left join user_info as b on a.user_id = b.user_id where tag like (?) `,
+      ["%" + params + "%"]
     );
     return result;
   } catch (err) {
-    await conn.query("ROLLBACK");
     console.log(err);
   } finally {
     conn.release();
   }
 };
 
-const searchCat = async (queryParams) => {
+const searchCat = async (params) => {
   const conn = await pool.getConnection();
   try {
     const [result] = await conn.query(
-      `select * from articles as a left join user_info as b on a.user_id = b.user_id where category like "%${queryParams}%" `
+      `select * from articles as a left join user_info as b on a.user_id = b.user_id where category like (?) `,
+      [params]
     );
     return result;
   } catch (err) {
-    await conn.query("ROLLBACK");
     console.log(err);
   } finally {
     conn.release();
@@ -80,16 +55,11 @@ const searchCat = async (queryParams) => {
 };
 
 const getHotTags = async () => {
-  // 等推薦系統出來後用 recom 做排序
   const conn = await pool.getConnection();
   try {
-    await conn.query("START TRANSACTION");
     const [result] = await conn.query("select * from tags");
-    console.log(result);
-    await conn.query("commit");
     return result;
   } catch (err) {
-    await conn.query("ROLLBACK");
     console.log(err);
   } finally {
     conn.release();
@@ -97,8 +67,7 @@ const getHotTags = async () => {
 };
 
 module.exports = {
-  searchKeywordsDB,
-  searchCategory,
+  searchKeywords,
   searchTag,
   searchCat,
   getHotTags,

@@ -8,200 +8,10 @@
   <title>404 NOT FOUND</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
-  <link href="../styles/sidebars.css" rel="stylesheet">
+  <link href="../styles/sidebar.css" rel="stylesheet">
   </link>
-  <style>
-    .swal2-popup {
-      width: auto !important;
-    }
+  <link rel="stylesheet" href="../styles/404.css">
 
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--clr-white);
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      row-gap: 1rem;
-      box-shadow: var(--clr-red-dark);
-      transition: var(--transition);
-      transform: translate(-100%);
-      /* 用此屬性控制縮放 */
-    }
-
-    .show-sidebar {
-      transform: translate(0);
-    }
-
-    .container {
-      margin-top: 80px;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      align-content: flex-start;
-    }
-
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
-
-    .bd-placeholder-img-footer {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
-    .dropdown-toggle {
-      border: none
-    }
-
-    .dropend {
-      border: none;
-      position: fixed
-    }
-
-    div.scrollmenu {
-      border: 2px;
-      border-radius: 10px;
-      background-color: #333;
-      overflow: auto;
-      white-space: nowrap;
-    }
-
-    div.scrollmenu a {
-      display: inline-block;
-      color: white;
-      text-align: center;
-      padding: 14px;
-      text-decoration: none;
-      border-right: inset #ACC0D8 1px;
-    }
-
-    div.scrollmenu a:hover {
-      background-color: #777;
-    }
-
-    /* sidebar dropdown 的部分 */
-    /* Fixed sidenav, full height */
-    .sidenav {
-      height: 100%;
-      width: 200px;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      padding-top: 20px;
-    }
-
-    /* Style the sidenav links and the dropdown button */
-    .sidenav a,
-    .dropdown-btn {
-      padding: 6px 8px 6px 16px;
-      text-decoration: none;
-      font-size: 20px;
-      color: #818181;
-      display: block;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .card-title {
-      display: -webkit-box;
-
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow-wrap: anywhere;
-      overflow: hidden;
-    }
-
-    /* On mouse-over */
-    .sidenav a:hover,
-    .dropdown-btn:hover {
-      color: #f1f1f1;
-    }
-
-    /* Main content */
-    .main {
-      margin-left: 200px;
-      /* Same as the width of the sidenav */
-      font-size: 20px;
-      /* Increased text to enable scrolling */
-      padding: 0px 10px;
-    }
-
-    /* Add an active class to the active dropdown button */
-    .active {
-
-      color: white;
-    }
-
-    /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-    .dropdown-container {
-      display: none;
-      background-color: #262626;
-      padding-left: 8px;
-    }
-
-    /* Optional: Style the caret down icon */
-    .fa-caret-down {
-      float: right;
-      padding-right: 8px;
-    }
-
-    /*  */
-    /* sidebar 縮放功能 */
-    .card-text {
-      display: -webkit-box;
-
-      -webkit-line-clamp: 5;
-      -webkit-box-orient: vertical;
-      overflow-wrap: anywhere;
-      overflow: hidden;
-    }
-
-    a {
-
-      text-decoration: none;
-    }
-
-    #bodyWrapper {
-      min-height: calc(100vh)
-    }
-
-    .containerFull {
-      position: relative;
-      text-align: center;
-      color: white;
-    }
-
-    .centered {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  </style>
 </head>
 
 <body>
@@ -232,21 +42,14 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- jquery ellipsis -->
 
-    <script src="../ejs.js"></script>
+    <script src="./ejs.js"></script>
 
 
     <script src="../js/util/truncate.js"></script>
     <script src="../js/header.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-      window.addEventListener("DOMContentLoaded", event => {
-        const audio = document.querySelector("#bgMusic")
-        console.log("aadasd")
-        audio.volume = 0.2
-        audio.play()
-      })
+    <script src="../js/404.js">
 
-      audio.play()
     </script>
 </body>
 

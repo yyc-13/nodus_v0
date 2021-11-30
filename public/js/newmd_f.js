@@ -1,3 +1,23 @@
+const url = "/user/authenticateonly";
+fetch(url, {
+  method: "GET",
+})
+  .then((res) => {
+    if (res.status !== 200) {
+      Swal.fire({
+        icon: "warning",
+        title: "請先登入",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        self.location.href = "/user/profile";
+      });
+    }
+
+    return res.json();
+  })
+  .catch((e) => {});
+
 const uploadArticleBtn = document.querySelector("#uploadBtn");
 uploadArticleBtn.addEventListener("click", async (e) => {
   e.preventDefault();
@@ -14,7 +34,6 @@ uploadArticleBtn.addEventListener("click", async (e) => {
     category == null || category == "",
     tag == null || tag == "")
   ) {
-    console.log(url, title, articleContent, category, "tag", tag);
     Swal.fire("請填入完整內容");
     return false;
   }
@@ -58,14 +77,13 @@ uploadArticleBtn.addEventListener("click", async (e) => {
   formData.append("coverPhoto", articleCover.url);
   formData.append("coverPhotoType", articleCover.type);
   formData.append("s3ImageRoute", "articleCover");
-  console.log("firstTime value", $("#firstTime").text());
+
   if (urlArr.includes("edit")) {
     const slug = urlArr.at(-1);
-    console.log("im edit");
+
     formData.append("edited", "1");
     formData.append("slug", slug);
   } else {
-    console.log("im new");
     formData.append("edited", "0");
   }
   if ($("#firstTime").text()) {
@@ -74,8 +92,8 @@ uploadArticleBtn.addEventListener("click", async (e) => {
     formData.append("firstTime", 0);
   }
   // data = await JSON.stringify(data);
-  // console.log(data);
-  console.log("formData before post image", formData);
+  //
+
   fetch("/images", {
     method: "POST",
     credentials: "include",
@@ -102,7 +120,6 @@ uploadArticleBtn.addEventListener("click", async (e) => {
 });
 
 const showArticle = function (url, formData) {
-  console.log(formData);
   fetch(url, {
     method: "POST",
     credentials: "include",
@@ -114,7 +131,6 @@ const showArticle = function (url, formData) {
       return response.text();
     })
     .then(function (data) {
-      console.log("edited?", formData.edited);
       if (formData.edited) {
         Swal.fire("文章編輯完成").then(() => {
           self.location.href = `/articles/${data}`;
@@ -125,19 +141,16 @@ const showArticle = function (url, formData) {
         });
       }
     })
-    .catch((e) => {
-      console.log("error");
-      console.log(e);
-    });
+    .catch((e) => {});
 };
 
 const currentUrl = window.location.href;
 const urlArr = currentUrl.split("/");
-console.log(urlArr);
+
 if (urlArr.includes("edit")) {
   const slug = urlArr.at(-1);
   const editBody = { slug: slug };
-  console.log("editBody", editBody);
+
   fetch("/articles/edit", {
     method: "POST",
     credentials: "include",
@@ -148,7 +161,6 @@ if (urlArr.includes("edit")) {
   })
     .then((res) => res.json())
     .then((json) => {
-      console.log("jsonjson", json);
       if (json == -1) {
         Swal.fire({
           icon: "warning",

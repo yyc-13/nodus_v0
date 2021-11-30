@@ -29,8 +29,8 @@ const createUser = async (
     }
 
     const [result] = await conn.query(
-      "INSERT INTO user_info (user_created_date,name, email, password,url_id,profile_pic) VALUES (?,?,?,?,?,?)",
-      [created_date, name, email, hashedPassword, url_id, profile_pic]
+      "INSERT INTO user_info (user_created_date,name, email, password,url_id,profile_pic,sub_count) VALUES (?,?,?,?,?,?,?)",
+      [created_date, name, email, hashedPassword, url_id, profile_pic, 0]
     );
     await conn.query("COMMIT");
     return result;
@@ -88,7 +88,7 @@ const userArticle = async (user) => {
     const [result] = await conn.query(
       `select user_id from user_info where email = "${user.data.email}"`
     );
-    console.log(result);
+
     const user_id = result[0].user_id;
     const [articles] = await conn.query(
       `select * from articles where user_id = ${user_id}`
@@ -161,9 +161,10 @@ const subscribe = async (type, articleslug, userId) => {
         "insert into subscription (channel_user_id,user_id) values (?,?)",
         [channel_user_id, userId]
       );
-      await conn.query(
+      const [result] = await conn.query(
         `update user_info set sub_count = sub_count + 1 where user_id = ${channel_user_id}`
       );
+      console.log("sub user_info result", result);
     } else if (type == "unsubscribe") {
       [subResult] = await conn.query(
         `delete from subscription where channel_user_id = ${channel_user_id} and user_id = ${userId}`
@@ -207,7 +208,7 @@ const channelCoverImg = async (userId, coverImgUrl) => {
   try {
     await conn.query("start transaction");
     const [result] = await conn.query(
-      `UPDATE user_info set coverPhoto = "${coverImgUrl}" where user_id = ${userId}`
+      `UPDATE user_info set cover_photo = "${coverImgUrl}" where user_id = ${userId}`
     );
     await conn.query("commit");
     return result;
@@ -243,7 +244,7 @@ const changedescription = async (userId, channelName, description) => {
   try {
     await conn.query("start transaction");
     const [result] = await conn.query(
-      `UPDATE user_info set channelTitle = "${channelName}", channelDescription = (?) where user_id = ${userId}`,
+      `UPDATE user_info set channel_title = "${channelName}", channel_description = (?) where user_id = ${userId}`,
       [description]
     );
     await conn.query("commit");

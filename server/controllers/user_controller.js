@@ -1,19 +1,15 @@
 require("dotenv").config();
 
 const userModel = require("../models/user_model");
-const bcrypt = require("bcrypt");
-const path = require("path");
-const express = require("express");
+
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 const router = require("express").Router();
 const bodyParser = require("body-parser");
-const { getArticles } = require("./article_controller");
 
-const { ACCESS_TOKEN_SECRET } = process.env; // 30 days by seconds
+const { ACCESS_TOKEN_SECRET } = process.env;
 
-// 從 app.use 改成 router.use，因為這邊 express 建立的是 router
 router.use(bodyParser.urlencoded({ extended: false }));
 
 function generateAccessToken(user) {
@@ -36,7 +32,7 @@ const userLogin = async (req, res) => {
   const result = await userModel.authLogIn(email, hashedPassword);
 
   if (result.length < 1) {
-    res.json("請輸入正確的 Email 和密碼");
+    res.status(400).json("請輸入正確的 Email 和密碼");
   } else {
     const userData = {
       created_date: result[0].created_date,
@@ -64,7 +60,7 @@ const userLogin = async (req, res) => {
       maxAge: 60000000000,
     });
     output.data = dataData;
-    res.send(output.data);
+    res.status(200).send(output.data);
   }
 };
 
@@ -99,7 +95,7 @@ const userRegister = async (req, res) => {
   const user = { data: userData };
   console.log(result);
   if (result == "email have been registered.") {
-    res.send({ status: "email have been registered." });
+    res.status(400).send({ status: "email have been registered." });
   } else {
     const id = result.insertId;
     const accessToken = generateAccessToken(user);
@@ -118,7 +114,7 @@ const userRegister = async (req, res) => {
       signed: true,
       maxAge: 60000000000,
     });
-    res.send(dataData);
+    res.status(200).send(dataData);
   }
 };
 
@@ -128,7 +124,7 @@ const userArticle = async (req, res) => {
   const result = await userModel.userArticle(user);
   console.log(result);
 
-  res.json(result);
+  res.status(200).json(result);
   return;
 };
 
@@ -142,16 +138,11 @@ const profileOrSignIn = async (req, res) => {
       const result = await userModel.findUser(user.data.userId);
       console.log(result);
       res.redirect(`/user/${result[0].url_id}`);
-      // res.render("profile.ejs", { articles: [] });
     } catch (err) {
       console.error(err);
       res.redirect("/");
-      // 之後改成用 ejs render 的路徑
     }
   } else {
-    var options = {
-      root: path.join(__dirname, "../../public/views"),
-    };
     res.render("loginSignup");
     return;
   }
@@ -166,7 +157,7 @@ const userChannel = async (req, res) => {
     userResult: result.userResult,
     articleResult: result.articleResult,
   };
-  res.json(data);
+  res.status(200).json(data);
 };
 
 const subscribe = async (req, res) => {
@@ -178,7 +169,7 @@ const subscribe = async (req, res) => {
     req.user.data.userId
   );
   console.log("result", result);
-  res.json(result);
+  res.status(200).json(result);
 };
 const unsubscribe = async (req, res) => {
   console.log("req.user", req.user);
@@ -189,7 +180,7 @@ const unsubscribe = async (req, res) => {
     req.user.data.userId
   );
   console.log("result", result);
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const newcollection = async (req, res) => {
@@ -200,7 +191,7 @@ const newcollection = async (req, res) => {
     req.body.collectionName
   );
   console.log("result", result);
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const changedescription = async (req, res) => {
@@ -219,10 +210,10 @@ const collectionList = async (req, res) => {
   if (req.user) {
     const result = await userModel.collectionList(req.user.data.userId);
     console.log("result", result);
-    res.json(result);
+    res.status(200).json(result);
   } else {
     const result = [];
-    res.json(result);
+    res.status(200).json(result);
   }
 };
 
@@ -231,37 +222,36 @@ const channelAuth = async (req, res) => {
   console.log("channelAuth", req.body);
   const result = await userModel.channelAuth(req.body.userUrl);
   if (result[0].user_id == req.user.data.userId) {
-    res.json(1);
+    res.status(200).json(1);
   } else {
-    res.json(0);
+    res.status(200).json(0);
   }
 };
 
 const subscription = async (req, res) => {
   if (!req.user) {
-    res.json(-1);
+    res.status(400).json(-1);
     return;
   }
   const result = await userModel.subscription(req.user.data.userId);
   console.log(result);
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const getuser = async (req, res) => {
   if (!req.user) {
-    res.json(-1);
+    res.status(400).json(-1);
     return;
   }
   const result = await userModel.getuser(req.user.data.userId);
   console.log(result);
-  res.json(result);
+  res.status(200).json(result);
 };
 
 module.exports = {
   userArticle,
   userLogin,
   userRegister,
-
   profileOrSignIn,
   userChannel,
   subscribe,

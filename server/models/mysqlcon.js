@@ -8,13 +8,6 @@ const pool = mysql.createPool({
   database: DB_DATABASE,
 });
 
-// connection.connect(function (err) {
-//   if (err) {
-//     console.log("can't connect to DB" + err.stack);
-//   } else {
-//     console.log("connect to DB successfully");
-//   }
-// });
 module.exports = {
   mysql,
   pool,

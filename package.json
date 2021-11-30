@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -41,6 +41,8 @@
   "devDependencies": {
     "@editorjs/link": "^2.3.1",
     "@types/whatwg-fetch": "^0.0.33",
+    "jest": "^27.3.1",
+    "just": "^0.1.8",
     "nodemon": "^2.0.14"
   }
 }

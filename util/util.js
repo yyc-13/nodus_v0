@@ -6,8 +6,7 @@ const User = require("../server/models/user_model");
 
 const jwt = require("jsonwebtoken");
 
-const { ACCESS_TOKEN_SECRET, UNSPLASH_ACCESS_KEY, UNSPLASH_SECRET_KEY } =
-  process.env; // 30 days by seconds
+const { ACCESS_TOKEN_SECRET, UNSPLASH_ACCESS_KEY } = process.env; // 30 days by seconds
 // on your node server
 const serverApi = createApi({
   accessKey: UNSPLASH_ACCESS_KEY,
@@ -36,10 +35,10 @@ const authenticateOnly = (roleId) => {
         console.log(user);
         res.status(200).send({ status: "user signed in." });
       } catch {
-        res.status(403).send({ error: "Forbidden" });
+        res.send({ error: "Forbidden" });
       }
     } else {
-      res.status(401).send({ error: "Unauthorized" });
+      res.send({ error: "Unauthorized" });
     }
   };
 };
@@ -81,10 +80,18 @@ const authentication = (roleId) => {
   };
 };
 
+const wrapAsync = (fn) => {
+  return function (req, res, next) {
+    // Make sure to `.catch()` any errors and pass them along to the `next()`
+    // middleware in the chain, in this case the error handler.
+    fn(req, res, next).catch(next);
+  };
+};
+
 // 照片上傳到 s3
 const fs = require("fs");
 const S3 = require("aws-sdk/clients/s3");
-const { nextTick } = require("process");
+
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
 const accessKeyId = process.env.AWS_ACCESS_KEY;
@@ -107,10 +114,27 @@ const uploadFile = (file, s3route) => {
   return s3.upload(uploadParams).promise();
 };
 
+const setDate = () => {
+  // For todays date;
+  Date.prototype.today = function () {
+    return (
+      (this.getDate() < 10 ? "0" : "") +
+      this.getDate() +
+      "/" +
+      (this.getMonth() + 1 < 10 ? "0" : "") +
+      (this.getMonth() + 1) +
+      "/" +
+      this.getFullYear()
+    );
+  };
+};
+
 module.exports = {
   authenticateOnly,
   verifyJwt,
   authentication,
   uploadFile,
   serverApi,
+  setDate,
+  wrapAsync,
 };

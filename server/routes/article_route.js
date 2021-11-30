@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const {
   saveArticleAndRedirect,
-  getArticles,
-  saveList,
+  // getArticles,
+
   showArticle,
   articleshowArticle,
   user,
@@ -20,19 +20,14 @@ const {
   unchecked,
 } = require("../controllers/article_controller");
 
-const Article = require("../models/article_model");
-
-const path = require("path");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-const { authentication } = require("../../util/util");
-const article_model = require("../models/article_model");
-const { Z_PARTIAL_FLUSH } = require("zlib");
+const { authentication, wrapAsync } = require("../../util/util");
 
 // render 區域
 router.route("/newmd").get((req, res) => {
-  res.render("articles/newmd_f", { article: "", firstTime: 1 });
+  res.render("articles/newmd_f", { firstTime: 1 });
 });
 
 router.route("/edit/:slug").get(function (req, res) {
@@ -48,24 +43,29 @@ router.route("/editorjs").get((req, res) => {
 });
 
 // api 區域
-router.route("/getArticle").get(authentication(), getArticles); //api
-router.route("/article").post(showArticle);
-router.route("/history").get(authentication(), history);
+// router.route("/getArticle").get(authentication(), wrapAsync(getArticles));
+router.route("/article").post(wrapAsync(showArticle));
+router.route("/history").get(authentication(), wrapAsync(history));
 
 // 文章瀏覽頁面的 api
-router.route("/articleshowArticle").post(authentication(), articleshowArticle);
-router.route("/user").post(authentication(), user);
-router.route("/recommend").post(authentication(), recommend);
-router.route("/comment").post(authentication(), comment);
-router.route("/savetocollection").post(authentication(), savetocollection);
-router.route("/unchecked").post(authentication(), unchecked);
-router.route("/newComment").post(authentication(), newComment);
-router.route("/likeBtn").post(authentication(), likeBtn);
-router.route("/clickedBtn").post(authentication(), clickedBtn);
+router
+  .route("/articleshowArticle")
+  .post(authentication(), wrapAsync(articleshowArticle));
+
+router.route("/user").post(authentication(), wrapAsync(user));
+router.route("/recommend").post(authentication(), wrapAsync(recommend));
+router.route("/comment").post(authentication(), wrapAsync(comment));
+router
+  .route("/savetocollection")
+  .post(authentication(), wrapAsync(savetocollection));
+router.route("/unchecked").post(authentication(), wrapAsync(unchecked));
+router.route("/newComment").post(authentication(), wrapAsync(newComment));
+router.route("/likeBtn").post(authentication(), wrapAsync(likeBtn));
+router.route("/clickedBtn").post(authentication(), wrapAsync(clickedBtn));
 // router.route("saveList").get(saveList);
-router.route("/delete").post(authentication(), deleteArticle);
-router.route("/edit").post(authentication(), editArticle);
-router.route("/indexArticles").get(authentication(), indexArticles);
-router.get("/:slug", authentication(), saveHistory);
+router.route("/delete").post(authentication(), wrapAsync(deleteArticle));
+router.route("/edit").post(authentication(), wrapAsync(editArticle));
+router.route("/indexArticles").get(authentication(), wrapAsync(indexArticles));
+router.get("/:slug", authentication(), wrapAsync(saveHistory));
 
 module.exports = router;

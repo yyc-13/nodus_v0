@@ -346,7 +346,7 @@ const likeBtn = async (articleId, category, userId) => {
       `delete from likes where user_id = ${userId} and article_id = ${articleId}`
     );
     const [likeResult] = await conn.query(
-      `insert into likes (user_id,article_id,likeCategory) values (?,?,?)`,
+      `insert into likes (user_id,article_id,like_category) values (?,?,?)`,
       [userId, articleId, category]
     );
     let countResult;

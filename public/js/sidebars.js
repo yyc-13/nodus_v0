@@ -34,17 +34,21 @@ for (i = 0; i < dropdown.length; i++) {
   });
 }
 
-// const logoutBtn = document.querySelector(".logout");
 const sidebarUrl = "/user/authenticateonly";
 fetch(sidebarUrl, {
   method: "GET",
-}).then((res) => {
-  if (res.status !== 200) {
-    document.querySelector(".logout").classList.add("d-none");
-  } else {
-    document.querySelector(".login").classList.add("d-none");
-  }
-});
+})
+  .then((res) => {
+    if (res.status !== 200) {
+      document.querySelector(".logout").classList.add("d-none");
+    } else {
+      document.querySelector(".login").classList.add("d-none");
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
 document.querySelector(".login").addEventListener("click", (e) => {
   e.preventDefault();
   self.location.href = "/user/profile";
@@ -59,7 +63,7 @@ document.querySelector(".logout").addEventListener("click", (e) => {
     .then((res) => {
       return res.json();
     })
-    .then((res) => {
+    .then((json) => {
       Swal.fire({
         icon: "success",
         title: "成功登出",

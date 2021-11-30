@@ -118,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          console.log(json.user[0].url_id);
           window.location.href = `/`;
         });
       })
@@ -170,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
         if (json.status == "email have been registered.") {
           throw "Email 已經註冊過";
         }

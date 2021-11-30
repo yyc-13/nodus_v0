@@ -14,6 +14,6 @@ fetch(`/articles/indexArticles`, {
       $("#noResult").removeClass("d-none");
       $("#noResult").text("抱歉，您的搜尋沒有結果...");
     }
-    console.log("search result", json);
+
     createCard(json);
   });

@@ -13,194 +13,17 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   </link>
-  <link rel="stylesheet" href="../../styles/unsplashSearch.css">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <style>
-    .swal2-popup {
-      width: auto !important;
-    }
 
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--clr-white);
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      row-gap: 1rem;
-      box-shadow: var(--clr-red-dark);
-      transition: var(--transition);
-      transform: translate(-100%);
-      /* 用此屬性控制縮放 */
-    }
-
-    .show-sidebar {
-      transform: translate(0);
-    }
-
-    .container {
-      margin-top: 90px;
-
-
-      align-items: flex-start;
-      flex-wrap: wrap;
-      align-content: flex-start;
-    }
-
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
-
-    .bd-placeholder-img-footer {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
-    .dropdown-toggle {
-      border: none
-    }
-
-    .dropend {
-      border: none;
-      position: fixed
-    }
-
-    div.scrollmenu {
-      border: 2px;
-      border-radius: 10px;
-      background-color: #333;
-      overflow: auto;
-      white-space: nowrap;
-    }
-
-    div.scrollmenu a {
-      display: inline-block;
-
-      text-align: center;
-      padding: 14px;
-      text-decoration: none;
-      border-right: inset #ACC0D8 1px;
-    }
-
-    div.scrollmenu a:hover {
-      background-color: #777;
-    }
-
-    /* sidebar dropdown 的部分 */
-    /* Fixed sidenav, full height */
-    .sidenav {
-      height: 100%;
-      width: 200px;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      padding-top: 20px;
-    }
-
-    /* Style the sidenav links and the dropdown button */
-    .sidenav a,
-    .dropdown-btn {
-      padding: 6px 8px 6px 16px;
-      text-decoration: none;
-      font-size: 20px;
-      color: #818181;
-      display: block;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      outline: none;
-    }
-
-    /* On mouse-over */
-    .sidenav a:hover,
-    .dropdown-btn:hover {
-      color: #f1f1f1;
-    }
-
-    /* Main content */
-    .main {
-      margin-left: 200px;
-      /* Same as the width of the sidenav */
-      font-size: 20px;
-      /* Increased text to enable scrolling */
-      padding: 0px 10px;
-    }
-
-    /* Add an active class to the active dropdown button */
-    .active {
-
-      color: white;
-    }
-
-    /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-    .dropdown-container {
-      display: none;
-      background-color: #262626;
-      padding-left: 8px;
-    }
-
-    /* Optional: Style the caret down icon */
-    .fa-caret-down {
-      float: right;
-      padding-right: 8px;
-    }
-
-    /*  */
-    /* sidebar 縮放功能 */
-    .card-text {
-      display: -webkit-box;
-      max-width: 200px;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow-wrap: anywhere;
-      overflow: hidden;
-    }
-
-    a {
-
-      text-decoration: none;
-    }
-  </style>
   <link rel="stylesheet"
     href="https://rawcdn.githack.com/darkterminal/tagin/6fa2863c13aa1841f33cf6dcbbf266c92fbf5412/dist/css/tagin.min.css">
 
+  <link rel="stylesheet" href="../../styles/unsplashSearch.css">
   <link rel="stylesheet" href="../../styles/index.css">
-  <style>
-    .article-container {
-      margin-top: 66px;
-    }
 
-    h1 {
-      margin-top: 5px;
-    }
-
-    #articleContainer {
-      align-items: unset;
-      flex-wrap: unset;
-    }
-  </style>
   <link rel="stylesheet" href="../../styles/header.css">
-  <link rel="stylesheet" href="../../styles/sidebars.css">
+  <link rel="stylesheet" href="../../styles/sidebar.css">
+  <link rel="stylesheet" href="../../styles/articles/newmd_f.css">
 </head>
 
 <body>
@@ -360,27 +183,7 @@
           <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
           <script>
 
-            const url = "/user/authenticateonly"
-            fetch(url, {
-              method: "GET",
-            }).then((res) => {
 
-              if (res.status !== 200) {
-                Swal.fire({
-                  icon: "warning",
-                  title: "請先登入",
-                  showConfirmButton: false,
-                  timer: 1500,
-                }).then(() => {
-                  self.location.href = "/user/profile"
-                })
-              }
-
-              return res.json()
-            }).catch((e) => {
-              console.log(e)
-
-            })
           </script>
 
 

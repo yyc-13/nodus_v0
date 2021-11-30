@@ -6,7 +6,6 @@ fetch(tagUrl, {
     return res.json();
   })
   .then((res) => {
-    console.log(res);
     var html = ejs.render(
       `
     <% tags.forEach(e =>{ %>
@@ -14,8 +13,5 @@ fetch(tagUrl, {
     <% }) %>`,
       { tags: res }
     );
-    // Vanilla JS:
-    // document.querySelector(".tags-wrapper").innerHTML = html;
-    // $(".scrollmenu").html(html);
     document.querySelector(".scrollmenu").innerHTML = html;
   });

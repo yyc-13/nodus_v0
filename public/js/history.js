@@ -1,7 +1,6 @@
 import { createCard } from "./util/createCard.js";
 
 const cookie = document.cookie;
-console.log("cookie", cookie);
 
 fetch("/articles/history", {
   method: "GET",
@@ -16,6 +15,6 @@ fetch("/articles/history", {
         self.location.href = "/";
       });
     }
-    console.log("history json", json);
+
     createCard(json);
   });
