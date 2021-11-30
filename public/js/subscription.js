@@ -15,7 +15,7 @@ fetch("/user/subscription", {
         e.sub_count = 0;
       }
       const card = document.createElement("div");
-      card.setAttribute("class", "wholeCard card col-3");
+      card.setAttribute("class", "wholeCard card col-3 w3-margin");
       card.style.width = "18rem";
       card.innerHTML = `      <a href="/user/${e.url_id}">          <div class="subCard" style="background-image:url(${e.profile_pic})"></div>
 

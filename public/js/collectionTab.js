@@ -7,7 +7,6 @@ fetch("/user/collectionList", {
 })
   .then((res) => res.json())
   .then((json) => {
-    console.log("json", json);
     if (json.length < 1) {
       Swal.fire("請先登入").then(() => {
         self.location.href = "/";
