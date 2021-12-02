@@ -39,12 +39,18 @@ fetch(sidebarUrl, {
   method: "GET",
 })
   .then((res) => {
-    if (res.status !== 200) {
+    return res.json();
+  })
+  .then((json) => {
+    if (json.error) {
       document.querySelector(".logout").classList.add("d-none");
+      document.querySelector(".login").classList.remove("d-none");
     } else {
       document.querySelector(".login").classList.add("d-none");
+      document.querySelector(".logout").classList.remove("d-none");
     }
   })
+
   .catch((err) => {
     console.error(err);
   });

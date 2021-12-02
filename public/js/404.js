@@ -5,4 +5,4 @@ window.addEventListener("DOMContentLoaded", (event) => {
   audio.play();
 });
 
-audio.play();
+// audio.play();

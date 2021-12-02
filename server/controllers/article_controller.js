@@ -8,8 +8,6 @@ const dompurify = createDomPurify(new JSDOM().window);
 const Article = require("../models/article_model");
 
 const saveArticleAndRedirect = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("red.body", req.body);
   const articlePack = {};
   articlePack.userId = req.user.data.userId;
   articlePack.title = req.body.title;

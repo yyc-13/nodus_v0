@@ -240,7 +240,7 @@ const subscription = async (req, res) => {
 
 const getuser = async (req, res) => {
   if (!req.user) {
-    res.status(400).json(-1);
+    res.status(200).json(-1);
     return;
   }
   const result = await userModel.getuser(req.user.data.userId);

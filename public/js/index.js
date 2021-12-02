@@ -13,6 +13,7 @@ fetch(`/articles/indexArticles`, {
     if (json.length < 1) {
       $("#noResult").removeClass("d-none");
       $("#noResult").text("抱歉，您的搜尋沒有結果...");
+      return;
     }
 
     createCard(json);

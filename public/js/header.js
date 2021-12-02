@@ -22,26 +22,26 @@ document.onkeydown = function (ev) {
     }
   }
 };
-
-fetch("/user/getuser", {
-  method: "get",
-  credentials: "include",
-  headers: {
-    "Content-Type": "application/json",
-  },
-})
-  .then((res) => {
-    return res.json();
+if (document.cookie.includes("accessToken")) {
+  fetch("/user/getuser", {
+    method: "get",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
   })
-  .then((json) => {
-    if (json == -1) {
-      return;
-    }
-    document
-      .querySelector(".menu-channel-icon")
-      .setAttribute("src", json[0].profile_pic);
-  });
-
+    .then((res) => {
+      return res.json();
+    })
+    .then((json) => {
+      if (json == -1) {
+        return;
+      }
+      document
+        .querySelector(".menu-channel-icon")
+        .setAttribute("src", json[0].profile_pic);
+    });
+}
 function searchFunc() {
   try {
     let searchInput = document.querySelector(".search-input").value;
