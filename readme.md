@@ -25,6 +25,7 @@
 - **Upload articles with markdown syntax**
   ![](https://imgur.com/p6hbFYO.png)
 - **Select piture from computer or UNSPLASH**
+- <img src="https://imgur.com/3rC89kQ.gif" width="50%" height="50%"/>
   ![](https://imgur.com/3rC89kQ.gif)
 - **Create tags in split second**
   ![](https://imgur.com/wlslu0D.gif)
