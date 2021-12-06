@@ -2,7 +2,8 @@ const router = require("express").Router();
 const {
   saveArticleAndRedirect,
   // getArticles,
-
+  newTrixGet,
+  newTrix,
   showArticle,
   articleshowArticle,
   user,
@@ -66,6 +67,8 @@ router.route("/clickedBtn").post(authentication(), wrapAsync(clickedBtn));
 router.route("/delete").post(authentication(), wrapAsync(deleteArticle));
 router.route("/edit").post(authentication(), wrapAsync(editArticle));
 router.route("/indexArticles").get(authentication(), wrapAsync(indexArticles));
+router.route("/newtrix").get(authentication(), wrapAsync(newTrixGet));
+router.route("/newtrix").post(authentication(), wrapAsync(newTrix));
 router.get("/:slug", authentication(), wrapAsync(saveHistory));
 
 module.exports = router;

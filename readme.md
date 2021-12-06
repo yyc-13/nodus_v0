@@ -20,35 +20,35 @@
 
 ## Features
 
-### Markdown Editor ㄉ
+### Markdown Editor
 
 - **Upload articles with markdown syntax**
   ![](https://imgur.com/p6hbFYO.png)
 - **Select piture from computer or UNSPLASH**
-  ![](https://imgur.com/3rC89kQ.gif)
+  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/unsplash_select.gif)
 - **Create tags in split second**
-  ![](https://imgur.com/wlslu0D.gif)
+  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/create_tags.gif)
 
 ### Search Articles
 
 - **With Tags**
-  ![](https://imgur.com/FpdMDHS.gif)
+  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/search_tags.gif)
 - **With Search Bar**
-  ![](https://imgur.com/KCPGjNK.gif)
+  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/search_bar.gif)
 - **With Category**
-  ![](https://imgur.com/Zn6OmPC.gif)
+  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/search_categories.gif)
 
 ### Like, comment, subscribe, Add to collection
 
-![](https://imgur.com/h7EiKlG.gif)
+![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/like_comment_subscribe.gif)
 
 ### Edit Profile and articles
 
-![](https://imgur.com/vldpgdi.gif)
+![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/edit_profile_article.gif)
 
 ### View Collections, History, Subscriptions,
 
-![](https://imgur.com/rv4oIl7.gif)
+![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/collection_history_sub.gif)
 
 ### Architecture
 

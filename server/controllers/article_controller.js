@@ -7,6 +7,17 @@ const { JSDOM } = require("jsdom");
 const dompurify = createDomPurify(new JSDOM().window);
 const Article = require("../models/article_model");
 
+const newTrixGet = async (req, res) => {
+  console.log(req.user);
+  console.log(req.body);
+  res.render("articles/newtrix");
+};
+const newTrix = async (req, res) => {
+  console.log(req.body);
+
+  const currentTime = Date.now().toString();
+  const articleId = SHA256(currentTime + articlePack.title).toString();
+};
 const saveArticleAndRedirect = async (req, res) => {
   const articlePack = {};
   articlePack.userId = req.user.data.userId;
@@ -311,5 +322,7 @@ module.exports = {
   deleteArticle,
   editArticle,
   history,
+  newTrix,
   indexArticles,
+  newTrixGet,
 };
