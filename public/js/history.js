@@ -1,7 +1,5 @@
 import { createCard } from "./util/createCard.js";
 
-const cookie = document.cookie;
-
 fetch("/articles/history", {
   method: "GET",
   credentials: "include",

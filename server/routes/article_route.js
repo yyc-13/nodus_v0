@@ -2,7 +2,7 @@ const router = require("express").Router();
 const {
   saveArticleAndRedirect,
   // getArticles,
-  newTrixGet,
+
   newTrix,
   showArticle,
   articleshowArticle,
@@ -19,6 +19,7 @@ const {
   history,
   indexArticles,
   unchecked,
+  getEditor,
 } = require("../controllers/article_controller");
 
 const multer = require("multer");
@@ -30,15 +31,31 @@ const { authentication, wrapAsync } = require("../../util/util");
 router.route("/newmd").get((req, res) => {
   res.render("articles/newmd_f", { firstTime: 1 });
 });
+router.route("/newtrix").get((req, res) => {
+  res.render("articles/newtrix", { firstTime: 1 });
+});
+router.route("/edittrix/:slug").get(function (req, res) {
+  res.render("articles/newtrix", { article: "", firstTime: 0 });
+});
 
-router.route("/edit/:slug").get(function (req, res) {
-  res.render("articles/newmd_f", { article: "", firstTime: "1" });
+router.route("/editmd/:slug").get(function (req, res) {
+  res.render("articles/newmd_f", { article: "", firstTime: 0 });
 });
 
 router
   .route("/newmd") // 之後把 admin 改成登入後的會員
-  .post(upload.single("coverPhoto"), authentication(), saveArticleAndRedirect);
-
+  .post(
+    upload.single("coverPhoto"),
+    authentication(),
+    wrapAsync(saveArticleAndRedirect)
+  );
+router
+  .route("/newtrix")
+  .post(
+    upload.single("coverPhoto"),
+    authentication(),
+    wrapAsync(saveArticleAndRedirect)
+  );
 router.route("/editorjs").get((req, res) => {
   res.render("editorJs_f");
 });
@@ -46,6 +63,7 @@ router.route("/editorjs").get((req, res) => {
 // api 區域
 // router.route("/getArticle").get(authentication(), wrapAsync(getArticles));
 router.route("/article").post(wrapAsync(showArticle));
+router.route("/editor").get(wrapAsync(getEditor));
 router.route("/history").get(authentication(), wrapAsync(history));
 
 // 文章瀏覽頁面的 api
@@ -67,8 +85,7 @@ router.route("/clickedBtn").post(authentication(), wrapAsync(clickedBtn));
 router.route("/delete").post(authentication(), wrapAsync(deleteArticle));
 router.route("/edit").post(authentication(), wrapAsync(editArticle));
 router.route("/indexArticles").get(authentication(), wrapAsync(indexArticles));
-router.route("/newtrix").get(authentication(), wrapAsync(newTrixGet));
-router.route("/newtrix").post(authentication(), wrapAsync(newTrix));
+
 router.get("/:slug", authentication(), wrapAsync(saveHistory));
 
 module.exports = router;

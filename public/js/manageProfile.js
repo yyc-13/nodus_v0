@@ -190,7 +190,20 @@ fetch("/user/userChannel", {
           denyButtonText: `取消`,
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = `/articles/edit/${slug}`;
+            fetch(`/articles/editor?slug=${slug}`, {
+              method: "GET",
+              credentials: "include",
+            })
+              .then((res) => {
+                return res.json();
+              })
+              .then((json) => {
+                if (json == "markdown") {
+                  window.location.href = `/articles/editmd/${slug}`;
+                } else {
+                  window.location.href = `/articles/edittrix/${slug}`;
+                }
+              });
           }
         });
       });

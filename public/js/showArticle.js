@@ -410,7 +410,11 @@ fetch("/articles/comment", {
     });
   });
 
-$("#non-subscribe").click(function () {
+$("#non-subscribe").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   fetch("/user/subscribe", {
     method: "POST",
     credentials: "include",
@@ -430,7 +434,11 @@ $("#non-subscribe").click(function () {
       });
     });
 });
-$("#subscribed").click(function () {
+$("#subscribed").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   fetch("/user/unsubscribe", {
     method: "POST",
     credentials: "include",
@@ -451,7 +459,11 @@ $("#subscribed").click(function () {
     });
 });
 
-$("#newCollectionBtn").click(function () {
+$("#newCollectionBtn").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   let newCollectionList = {
     collectionName: $("#newCollectionInput").val(),
   };
@@ -477,7 +489,11 @@ $("#newCollectionBtn").click(function () {
     });
 });
 
-$("#newCommentBtn").click(function () {
+$("#newCommentBtn").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   let commentData = {
     articleId: $("#articleId").text(),
     commentInput: $(".newCommentMain").val(),
@@ -497,7 +513,11 @@ $("#newCommentBtn").click(function () {
     });
 });
 
-$("#non-likeBtnMain").click(function () {
+$("#non-likeBtnMain").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   const likeBody = {
     category: 1,
     articleId: $("#articleId").text(),
@@ -511,7 +531,12 @@ $("#non-likeBtnMain").click(function () {
     body: JSON.stringify(likeBody),
   }).then((json) => {});
 });
-$("#dislikeBtnMain").click(function () {
+
+$("#dislikeBtnMain").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   const likeBody = {
     category: 0,
     articleId: $("#articleId").text(),
@@ -525,7 +550,12 @@ $("#dislikeBtnMain").click(function () {
     body: JSON.stringify(likeBody),
   }).then((json) => {});
 });
-$("#likedBtn").click(function () {
+
+$("#likedBtn").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   const likeBody = {
     category: 1,
     articleId: $("#articleId").text(),
@@ -543,7 +573,11 @@ $("#likedBtn").click(function () {
     })
     .then((json) => {});
 });
-$("#dislikedBtn").click(function () {
+$("#dislikedBtn").on("click", function () {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   const likeBody = {
     category: 0,
     articleId: $("#articleId").text(),
@@ -566,27 +600,22 @@ $("#dislikedBtn").click(function () {
 const nonSubBtn = document.querySelector(".non-subscribe");
 const subedBtn = document.querySelector(".subscribed");
 nonSubBtn.addEventListener("click", () => {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   nonSubBtn.classList.toggle("d-none");
   subedBtn.classList.toggle("d-none");
 });
 
 subedBtn.addEventListener("click", () => {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   nonSubBtn.classList.toggle("d-none");
   subedBtn.classList.toggle("d-none");
 });
-
-// 按收藏 ok
-// const uncollectBtn = document.querySelector(".uncollect")
-// const collectedBtn = document.querySelector(".collected")
-// uncollectBtn.addEventListener("click", () => {
-//   uncollectBtn.classList.toggle("d-none")
-//   collectedBtn.classList.toggle("d-none")
-// })
-
-// collectedBtn.addEventListener("click", () => {
-//   uncollectBtn.classList.toggle("d-none")
-//   collectedBtn.classList.toggle("d-none")
-// })
 
 // 按讚 倒讚
 const likeSvg = document.querySelector(".likeSvg");
@@ -595,6 +624,10 @@ const dislikeSvg = document.querySelector(".dislikeSvg");
 const dislikedSvg = document.querySelector(".dislikedSvg");
 likeSvg.addEventListener("click", (e) => {
   e.preventDefault();
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   let count = 1;
   if (!dislikedSvg.classList.contains("d-none")) {
     count = count + 1;
@@ -607,7 +640,12 @@ likeSvg.addEventListener("click", (e) => {
   likeCount += count;
   $("#likeCount").text(likeCount);
 });
+
 dislikeSvg.addEventListener("click", (e) => {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   e.preventDefault();
   let count = 1;
   if (!likedSvg.classList.contains("d-none")) {
@@ -621,7 +659,12 @@ dislikeSvg.addEventListener("click", (e) => {
   likeCount -= count;
   $("#likeCount").text(likeCount);
 });
+
 likedSvg.addEventListener("click", (e) => {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   e.preventDefault();
   let count = 1;
   likedSvg.classList.add("d-none");
@@ -632,6 +675,10 @@ likedSvg.addEventListener("click", (e) => {
 });
 
 dislikedSvg.addEventListener("click", (e) => {
+  if (!document.cookie.includes("accessToken")) {
+    Swal.fire("請先登入");
+    return;
+  }
   e.preventDefault();
   let count = 1;
   dislikedSvg.classList.add("d-none");

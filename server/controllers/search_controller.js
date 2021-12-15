@@ -43,6 +43,7 @@ const getHotTags = async (req, res) => {
 
 const getUnsplashApiKey = async (req, res) => {
   const apiKey = UNSPLASH_ACCESS_KEY;
+
   res.status(200).json(apiKey);
 };
 

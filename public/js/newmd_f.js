@@ -16,7 +16,9 @@ fetch(url, {
 
     return res.json();
   })
-  .catch((e) => {});
+  .catch((e) => {
+    console.log("authenticate error", e);
+  });
 
 const uploadArticleBtn = document.querySelector("#uploadBtn");
 uploadArticleBtn.addEventListener("click", async (e) => {
@@ -54,7 +56,7 @@ uploadArticleBtn.addEventListener("click", async (e) => {
     articleCover.url = document.querySelector("#articleCover").files[0];
   }
 
-  if (!urlArr.includes("edit")) {
+  if (!urlArr.includes("editmd")) {
     if (
       articleCover.url == null ||
       articleCover.url == undefined ||
@@ -78,7 +80,7 @@ uploadArticleBtn.addEventListener("click", async (e) => {
   formData.append("coverPhotoType", articleCover.type);
   formData.append("s3ImageRoute", "articleCover");
 
-  if (urlArr.includes("edit")) {
+  if (urlArr.includes("editmd")) {
     const slug = urlArr.at(-1);
 
     formData.append("edited", "1");
@@ -147,7 +149,7 @@ const showArticle = function (url, formData) {
 const currentUrl = window.location.href;
 const urlArr = currentUrl.split("/");
 
-if (urlArr.includes("edit")) {
+if (urlArr.includes("editmd")) {
   const slug = urlArr.at(-1);
   const editBody = { slug: slug };
 
@@ -172,7 +174,7 @@ if (urlArr.includes("edit")) {
         });
       }
       $("#uploadBtn").text("更新文章！");
-
+      console.log("edit json", json);
       document.querySelector(".title").innerText = json[0].title;
       document.querySelector(".articleContent").innerHTML = json[0].content;
       document.querySelector("#category").value = json[0].category;
@@ -201,6 +203,12 @@ if (urlArr.includes("edit")) {
       tagInput.setAttribute("placeholder", "");
       tagInput.setAttribute("style", "width:3px");
       document.querySelector(".tagin-wrapper").appendChild(tagInput);
+      $("#imgPreview").css(
+        "background-image",
+        "url(" + json[0].cover_images + ")"
+      );
+      $("#imgPreview").attr("data-imgUrl", `${imgUrl}`);
+      $("#imgPreview").attr("data-type", `input`);
     });
 }
 

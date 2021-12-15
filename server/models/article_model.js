@@ -36,7 +36,7 @@ const getArticles = async () => {
   }
 };
 
-const mdInsert = async (articlePack) => {
+const insert = async (articlePack) => {
   const conn = await pool.getConnection();
   try {
     const articleArr = Object.values(articlePack);
@@ -44,7 +44,7 @@ const mdInsert = async (articlePack) => {
     await conn.query("START TRANSACTION");
     const tags = articleArr[4].split(" ");
     const [result] = await conn.query(
-      "INSERT INTO articles (user_id, title,content,category,tag,description,cover_images,article_created_date,edited,content_html,reading_time,slug,likes,views) VALUES (?)",
+      "INSERT INTO articles (user_id, title,content,category,tag,description,cover_images,article_created_date,edited,content_html,reading_time,slug,likes,views,editor) VALUES (?)",
       [articleArr]
     );
 
@@ -77,7 +77,7 @@ const mdInsert = async (articlePack) => {
     conn.release();
   }
 };
-const mdEdit = async (articlePack) => {
+const edit = async (articlePack) => {
   const conn = await pool.getConnection();
   try {
     await conn.query("START TRANSACTION");
@@ -274,6 +274,7 @@ const saveHistory = async (userId, articleSlug) => {
     await conn.query("commit");
     return { result, viewsResult };
   } catch (error) {
+    await conn.query("ROLLBACK");
     console.log(error);
     return -1;
   } finally {
@@ -406,11 +407,28 @@ const editArticle = async (articleSlug) => {
 
 const deleteArticle = async (userId, articleSlug) => {
   const conn = await pool.getConnection();
-  const result = await conn.query(
-    `delete from articles where slug = "${articleSlug}"`
-  );
-  conn.release();
-  return result;
+  try {
+    const [articleId] = await conn.query(
+      `select article_id from articles where slug = (?)`,
+      [articleSlug]
+    );
+    console.log("articleId", articleId);
+    const result2 = await conn.query(
+      `delete from history_intermediate where article_id = (?) `,
+      [articleId[0].article_id]
+    );
+    const result = await conn.query(`delete from articles where slug = (?)`, [
+      articleSlug,
+    ]);
+
+    return result;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    conn.release();
+  }
 };
 
 const history = async (userId) => {
@@ -422,10 +440,21 @@ const history = async (userId) => {
   return result;
 };
 
+const getEditor = async (slug) => {
+  const conn = await pool.getConnection();
+  const [result] = await conn.query(
+    `select editor from articles where slug = (?)`,
+    [slug]
+  );
+
+  conn.release();
+  return result;
+};
+
 module.exports = {
   searchArticles,
-  mdInsert,
-  mdEdit,
+  insert,
+  edit,
   getArticles,
   createArticle,
   searchUser,
@@ -440,4 +469,5 @@ module.exports = {
   deleteArticle,
   editArticle,
   history,
+  getEditor,
 };

@@ -74,8 +74,6 @@ app.post(
   authentication(),
   upload.single("coverPhoto"),
   async (req, res) => {
-    console.log("req.user", req.user);
-    console.log("req.body", req.body);
     // 註明 s3 要放的資料夾
 
     if (req.body.coverPhotoType == "unsplash") {
@@ -113,6 +111,9 @@ app.post(
         result.Location
       );
       console.log("in profilePic");
+      res.send({ imagePath: result.Location });
+    } else if (req.body.s3ImageRoute == "articlePhoto") {
+      console.log("in articlePhoto");
       res.send({ imagePath: result.Location });
     }
   }

@@ -7,16 +7,14 @@ const { JSDOM } = require("jsdom");
 const dompurify = createDomPurify(new JSDOM().window);
 const Article = require("../models/article_model");
 
-const newTrixGet = async (req, res) => {
-  console.log(req.user);
-  console.log(req.body);
-  res.render("articles/newtrix");
-};
 const newTrix = async (req, res) => {
-  console.log(req.body);
+  console.log("req.body", req.body);
+  console.log("req.body.document", req.body.document);
+  console.log("req.body.document[0]", req.body.document[0]);
 
   const currentTime = Date.now().toString();
   const articleId = SHA256(currentTime + articlePack.title).toString();
+  res.status(200).json("trix document received");
 };
 const saveArticleAndRedirect = async (req, res) => {
   const articlePack = {};
@@ -56,13 +54,13 @@ const saveArticleAndRedirect = async (req, res) => {
     articlePack.slug = articleId;
     articlePack.likes = 0;
     articlePack.views = 0;
-    console.log("articlePack", articlePack);
-    const insertResult = await Article.mdInsert(articlePack);
 
-    console.log("insertResult", insertResult);
+    const editorUrl = req.originalUrl;
+    articlePack.editor = editorUrl.substring(editorUrl.lastIndexOf("/") + 1);
+    const insertResult = await Article.insert(articlePack);
   } else {
     articlePack.slug = req.body.slug;
-    const editResult = await Article.mdEdit(articlePack);
+    const editResult = await Article.edit(articlePack);
     console.log("editResult", editResult);
   }
   res.status(200).send(articlePack.slug);
@@ -284,6 +282,12 @@ const deleteArticle = async (req, res) => {
   }
 };
 
+const getEditor = async (req, res) => {
+  const result = await Article.getEditor(req.query.slug);
+
+  res.status(200).json(result);
+};
+
 const editArticle = async (req, res) => {
   const result = await Article.editArticle(req.body.slug);
   if (req.user.data.userId != result[0].user_id) {
@@ -324,5 +328,5 @@ module.exports = {
   history,
   newTrix,
   indexArticles,
-  newTrixGet,
+  getEditor,
 };
