@@ -16,7 +16,6 @@ const serverApi = createApi({
 const verifyJwt = (token) => {
   async () => {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      console.log(err);
       if (err) return res.sendStatus(403);
       req.user = user;
       res.send(user);
@@ -29,10 +28,10 @@ const authenticateOnly = (roleId) => {
   return async function (req, res) {
     if (req.signedCookies.accessToken) {
       const accessToken = req.signedCookies.accessToken;
-      console.log(accessToken);
+
       try {
         const user = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
-        console.log(user);
+
         res.status(200).send({ status: "user signed in." });
       } catch {
         res.send({ error: "Forbidden" });
@@ -48,7 +47,7 @@ const authentication = (roleId) => {
     // let accessToken = req.get("Authorization");
     if (req.signedCookies.accessToken) {
       const accessToken = req.signedCookies.accessToken;
-      console.log(accessToken);
+
       try {
         const user = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
 
@@ -104,7 +103,7 @@ const s3 = new S3({
 });
 const uploadFile = (file, s3route) => {
   const fileStream = fs.createReadStream(file.path);
-  console.log(s3route);
+
   const uploadParams = {
     Bucket: bucketName + "/" + s3route,
     Body: fileStream,

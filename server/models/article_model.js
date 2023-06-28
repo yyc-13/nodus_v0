@@ -11,7 +11,7 @@ const createArticle = async (/* 傳進來的 variable */) => {
     return result.insertId;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -29,7 +29,6 @@ const getArticles = async () => {
     await conn.query("COMMIT");
     return result;
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -54,13 +53,11 @@ const insert = async (articlePack) => {
       );
 
       if (tagResult.length > 0) {
-        console.log("tag exist");
         tagResult[0].tags_id;
         await conn.query(
           `update tags set recom_score = recom_score +1 where tags_id =  ${tagResult[0].tags_id}`
         );
       } else {
-        console.log("tag not exist");
         await conn.query(`insert into tags (tag,recom_score) values(?,?)`, [
           el,
           1,
@@ -71,7 +68,6 @@ const insert = async (articlePack) => {
     await conn.query("COMMIT");
     return result;
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -96,9 +92,7 @@ const edit = async (articlePack) => {
     );
     var imgResult;
     if (articlePack.coverPhotoPath) {
-      console.log("articlePack.coverPhotoPath is true");
     } else {
-      console.log("articlePack.coverPhotoPath is false");
     }
 
     if (articlePack.coverPhotoPath) {
@@ -109,7 +103,6 @@ const edit = async (articlePack) => {
     await conn.query("commit");
     return { result, imgResult };
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -132,7 +125,6 @@ const searchArticles = async (slug) => {
     await conn.query("COMMIT");
     return { articleResult, authorResult };
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -147,12 +139,12 @@ const searchUser = async (articleSlug, userId) => {
       "SELECT article_id, user_id  from articles where slug = ?",
       [articleSlug]
     );
-    console.log("article", article);
+
     const [user] = await conn.query(
       "select * from user_info where user_id = ?",
       [userId]
     );
-    console.log("user", user);
+
     const [userCollection] = await conn.query(
       "SELECt * from collection where user_id = ?",
       [userId]
@@ -160,7 +152,7 @@ const searchUser = async (articleSlug, userId) => {
     if (!userCollection) {
       userCollection = [];
     }
-    console.log("userCollection", userCollection);
+
     let collectQueryStr = "";
     for (let i = 0; i < userCollection.length; i++) {
       if (i == 0) {
@@ -171,21 +163,18 @@ const searchUser = async (articleSlug, userId) => {
     }
     let collectionContent;
     if (collectQueryStr.length > 10) {
-      console.log("collectQueryStr", collectQueryStr);
       let collectionQuery = `select * from collection_intermediate where article_id = ${article[0].article_id} and ${collectQueryStr}`;
       [collectionContent] = await conn.query(collectionQuery);
-      console.log("collectionContent", collectionContent);
     } else {
       collectionContent = [];
     }
     const [likeContent] = await conn.query(
       `select * from likes where user_id = ${userId} and article_id = ${article[0].article_id}`
     );
-    console.log("likeContent", likeContent);
+
     const [subscription] = await conn.query(
       `select * from subscription where channel_user_id  = ${article[0].user_id} and user_id = ${userId}`
     );
-    console.log("subscription", subscription);
 
     await conn.query("COMMIT");
     return {
@@ -196,7 +185,6 @@ const searchUser = async (articleSlug, userId) => {
       subscription,
     };
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -210,7 +198,7 @@ const recommend = async (articleSlug) => {
     const [result] = await conn.query(
       `SELECT * from articles where slug = "${articleSlug}"`
     );
-    console.log(result);
+
     const category = result[0].category;
     const userID = result[0].user_id;
     const [recomSameCat] = await conn.query(
@@ -223,7 +211,6 @@ const recommend = async (articleSlug) => {
     await conn.query("commit");
     return { recomSameCat, recomNewest };
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -243,7 +230,6 @@ const comment = async (articleSlug, userId) => {
     await conn.query("commit");
     return { comment };
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -275,7 +261,7 @@ const saveHistory = async (userId, articleSlug) => {
     return { result, viewsResult };
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -293,7 +279,6 @@ const savetocollection = async (collectionId, articleId, userId) => {
     await conn.query("commit");
     return saveResult;
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -308,7 +293,6 @@ const unchecked = async (collectionId, articleId, userId) => {
     );
     return result;
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -332,7 +316,6 @@ const newComment = async (
     await conn.query("commit");
     return commentResult;
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -352,12 +335,10 @@ const likeBtn = async (articleId, category, userId) => {
     );
     let countResult;
     if (category) {
-      console.log("like + 1");
       [countResult] = await conn.query(
         `update articles set likes = likes + 1 where article_id = ${articleId}`
       );
     } else {
-      console.log("dislike -1");
       [countResult] = await conn.query(
         `update articles set likes = likes - 1 where article_id = ${articleId}`
       );
@@ -365,7 +346,6 @@ const likeBtn = async (articleId, category, userId) => {
     await conn.query("commit");
     return { likeResult, countResult };
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -389,7 +369,6 @@ const clickedBtn = async (articleId, category, userId) => {
     }
     return result;
   } catch (err) {
-    console.log(err);
     return -1;
   } finally {
     conn.release();
@@ -412,7 +391,7 @@ const deleteArticle = async (userId, articleSlug) => {
       `select article_id from articles where slug = (?)`,
       [articleSlug]
     );
-    console.log("articleId", articleId);
+
     const result2 = await conn.query(
       `delete from history_intermediate where article_id = (?) `,
       [articleId[0].article_id]
@@ -424,7 +403,7 @@ const deleteArticle = async (userId, articleSlug) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();

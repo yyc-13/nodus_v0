@@ -77,7 +77,7 @@ test("預期會拿到符合 articleId 的 article", async () => {
   const res = mockResponse();
   await showArticle(req, res);
   expect(res.status).toHaveBeenCalledWith(200);
-  console.log(res.json);
+
   expect(res.json).toHaveBeenCalledWith({
     articleResult: [
       {

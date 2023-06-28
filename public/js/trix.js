@@ -723,7 +723,6 @@ http://trix-editor.org/
         }
         function p(t) {
           if (t.shadowRoot && !t.shadowRoot.__watched) {
-            y.dom && console.log("watching shadow-root for: ", t.localName);
             for (var e = t.shadowRoot; e; ) g(e), (e = e.olderShadowRoot);
           }
         }

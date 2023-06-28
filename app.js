@@ -85,14 +85,12 @@ app.post(
       return;
     }
     const file = req.file;
-    console.log("file", file);
 
     const result = await uploadFile(file, req.body.s3ImageRoute);
     fs.unlink(`uploads/${file.filename}`, function (err) {
       if (err) {
         console.error(err);
       }
-      console.log("File Deleted");
     });
 
     let dbResult;
@@ -101,19 +99,16 @@ app.post(
         req.user.data.userId,
         result.Location
       );
-      console.log("dbResult", dbResult);
     } else if (req.body.s3ImageRoute == "articleCover") {
-      console.log("in articleCover");
       res.send({ imagePath: result.Location });
     } else if (req.body.s3ImageRoute == "profilePic") {
       dbResult = await user_model.profilePic(
         req.user.data.userId,
         result.Location
       );
-      console.log("in profilePic");
+
       res.send({ imagePath: result.Location });
     } else if (req.body.s3ImageRoute == "articlePhoto") {
-      console.log("in articlePhoto");
       res.send({ imagePath: result.Location });
     }
   }
@@ -138,15 +133,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-  console.log(err);
   res.status(500).send("Internal Server Error");
 });
 const port = 3000;
 app.listen(port, () => {
-  console.log(`Nodus listening on port ${port}`);
   var datetime =
     "LastSync: " + new Date().today() + " @ " + new Date().timeNow();
-  console.log(datetime);
 });
 
 // app.get("/test",(req,res)=>{

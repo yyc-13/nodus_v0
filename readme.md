@@ -70,7 +70,7 @@
 ### Database
 
 - **RDS** + **MySQL**
-- ORM: **Sequelize**
+<!-- - ORM: **Sequelize** -->
 - Schema:
   ![](https://imgur.com/u1af0ZE.png)
 

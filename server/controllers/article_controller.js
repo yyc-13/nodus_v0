@@ -8,26 +8,31 @@ const dompurify = createDomPurify(new JSDOM().window);
 const Article = require("../models/article_model");
 
 const newTrix = async (req, res) => {
-  console.log("req.body", req.body);
-  console.log("req.body.document", req.body.document);
-  console.log("req.body.document[0]", req.body.document[0]);
-
   const currentTime = Date.now().toString();
   const articleId = SHA256(currentTime + articlePack.title).toString();
   res.status(200).json("trix document received");
 };
 const saveArticleAndRedirect = async (req, res) => {
-  const articlePack = {};
-  articlePack.userId = req.user.data.userId;
-  articlePack.title = req.body.title;
+  let body = req.body;
+  let articlePack = {
+    userId: req.user.data.userId,
+    title: body.title,
+    markdown: body.articleContent,
+    category: body.category,
+    tag: body.tag,
+    description: body.description,
+    created_date: new Date().today() + " @ " + new Date().timeNow(),
+    edited: body.edited,
+  };
 
-  articlePack.markdown = req.body.articleContent;
-  articlePack.category = req.body.category;
-  articlePack.tag = req.body.tag;
-  articlePack.description = req.body.description;
-  articlePack.coverPhotoPath = req.body.coverPhotoImagePath;
-  articlePack.created_date = new Date().today() + " @ " + new Date().timeNow();
-  articlePack.edited = req.body.edited;
+  // add CDN route to s3
+  //const urls = "https://nodus.s3.ap-southeast-1.amazonaws.com/articleCover/abf2f8eebc6faea7c66575ac63878805".split("/")
+
+  // const url = urls.join("/");
+
+  const coverPhotoPaths = req.body.coverPhotoImagePath.split("/");
+  coverPhotoPaths.splice(0, 3, "https://d133yd4awdh549.cloudfront.net");
+  articlePack.coverPhotoPath = coverPhotoImagePaths.join("/");
 
   const currentTime = Date.now().toString();
 
@@ -43,14 +48,12 @@ const saveArticleAndRedirect = async (req, res) => {
     ""
   );
   const wordCount = articlePureText.split(" ").length;
-  console.log("wordCount", wordCount);
 
   articlePack.readingTime = Math.ceil(wordCount / 250);
-  console.log("articlePack.edited", articlePack.edited);
-  console.log(!articlePack.edited);
-  console.log(articlePack.edited);
+
   // 進 db
   if (articlePack.edited == false) {
+    articlePakc[(slug, likes, views)] = [articleId, 0, 0];
     articlePack.slug = articleId;
     articlePack.likes = 0;
     articlePack.views = 0;
@@ -61,7 +64,6 @@ const saveArticleAndRedirect = async (req, res) => {
   } else {
     articlePack.slug = req.body.slug;
     const editResult = await Article.edit(articlePack);
-    console.log("editResult", editResult);
   }
   res.status(200).send(articlePack.slug);
 };
@@ -77,8 +79,6 @@ const indexArticles = async (req, res) => {
 };
 
 const showArticle = async (req, res) => {
-  console.log(req.body);
-
   const result = await Article.searchArticles(req.body.articleId);
   // res.status(200).json(req.body);
   res.status(200).json(result);
@@ -117,8 +117,6 @@ const articleshowArticle = async (req, res) => {
 };
 
 const user = async (req, res) => {
-  console.log("req.body in user", req.body);
-  console.log("req.user in user", req.user);
   if (!req.user) {
     res.status(400).json(-1);
     return -1;
@@ -127,7 +125,7 @@ const user = async (req, res) => {
     req.body.articleSlug,
     req.user.data.userId
   );
-  console.log("user result", result);
+
   if (result.userCollection.length < 1) {
     result.userCOllection = [];
   }
@@ -146,10 +144,8 @@ const user = async (req, res) => {
 };
 
 const recommend = async (req, res) => {
-  console.log("req.body in recommend", req.body);
-  console.log("req.user in recommend", req.user);
   const result = await Article.recommend(req.body.articleSlug);
-  console.log("recommend result", result);
+
   const recomArticle = result.recomSameCat.concat(result.recomNewest);
   let data = {
     recomArticle: recomArticle,
@@ -158,9 +154,6 @@ const recommend = async (req, res) => {
 };
 
 const comment = async (req, res) => {
-  console.log("req.body in recommend", req.body);
-  console.log("req.user in recommend", req.user);
-
   const result = await Article.comment(req.body.articleSlug);
   result.comment.forEach((e) => {
     e.replyArr = [];
@@ -177,7 +170,7 @@ const comment = async (req, res) => {
       }
     }
   });
-  console.log("comment result", result);
+
   let data = {
     commentArr: result.comment,
   };
@@ -185,15 +178,11 @@ const comment = async (req, res) => {
 };
 
 const saveHistory = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("controller slug", req.params.slug);
   if (req.user) {
     const result = await Article.saveHistory(
       req.user.data.userId,
       req.params.slug
     );
-
-    console.log("saveHistory result", result);
   }
 
   res.render("articles/show_article");
@@ -203,17 +192,16 @@ const saveHistory = async (req, res) => {
 };
 
 const savetocollection = async (req, res) => {
-  console.log("req.body in savetocollection", req.body);
   const collectionId = req.body.collectionId;
   const articleId = req.body.articleId;
   const userId = req.user.data.userId;
-  console.log("req.user in savetocollection", req.user);
+
   const result = await Article.savetocollection(
     collectionId,
     articleId,
     userId
   );
-  console.log("result in savetocollection", result);
+
   res.status(200).json("all good");
 };
 
@@ -226,10 +214,8 @@ const unchecked = async (req, res) => {
 };
 
 const newComment = async (req, res) => {
-  console.log("req.body in newComment", req.body);
-  console.log("req.user in newComment", req.user);
   var datetime = new Date().today() + " @ " + new Date().timeNow();
-  console.log(datetime);
+
   const result = await Article.newComment(
     req.body.articleId,
     req.body.commentInput,
@@ -237,7 +223,7 @@ const newComment = async (req, res) => {
     req.user.data.userId,
     datetime
   );
-  console.log("result in newComment", result);
+
   res.status(200).json(result);
 };
 const likeBtn = async (req, res) => {
@@ -246,7 +232,7 @@ const likeBtn = async (req, res) => {
     req.body.category,
     req.user.data.userId
   );
-  console.log("result in newComment", result);
+
   res.status(200).json(result);
 };
 

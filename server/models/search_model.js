@@ -17,7 +17,6 @@ const searchKeywords = async (params) => {
     const [result] = await conn.query(query, queryParams);
     return result;
   } catch (error) {
-    console.log(error);
     return -1;
   } finally {
     conn.release();
@@ -33,7 +32,6 @@ const searchTag = async (params) => {
     );
     return result;
   } catch (err) {
-    console.log(err);
   } finally {
     conn.release();
   }
@@ -48,7 +46,6 @@ const searchCat = async (params) => {
     );
     return result;
   } catch (err) {
-    console.log(err);
   } finally {
     conn.release();
   }
@@ -60,7 +57,6 @@ const getHotTags = async () => {
     const [result] = await conn.query("select * from tags");
     return result;
   } catch (err) {
-    console.log(err);
   } finally {
     conn.release();
   }

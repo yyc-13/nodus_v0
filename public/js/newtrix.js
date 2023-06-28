@@ -16,9 +16,7 @@ fetch(url, {
 
     return res.json();
   })
-  .catch((e) => {
-    console.log("authenticate error", e);
-  });
+  .catch((e) => {});
 
 const uploadArticleBtn = document.querySelector("#uploadBtn");
 uploadArticleBtn.addEventListener("click", async (e) => {
@@ -143,9 +141,7 @@ const showArticle = function (url, formData) {
         });
       }
     })
-    .catch((e) => {
-      console.log("error", e);
-    });
+    .catch((e) => {});
 };
 
 // edit article get api
@@ -166,7 +162,6 @@ if (urlArr.includes("edittrix")) {
   })
     .then((res) => res.json())
     .then((json) => {
-      console.log("edit json", json);
       if (json == -1) {
         Swal.fire({
           icon: "warning",
@@ -232,7 +227,6 @@ $("#articleCover").on("change", function () {
 (function () {
   addEventListener("trix-attachment-add", function (event) {
     if (event.attachment.file) {
-      console.log("event.attachment.file", event.attachment.file);
       uploadFileAttachment(event.attachment);
     }
   });
@@ -254,15 +248,12 @@ $("#articleCover").on("change", function () {
           return res.json();
         })
         .then((json) => {
-          console.log("articlePhoto result", json);
           var attributes = {
             url: json.imagePath,
             href: json.imagePath + "?content-disposition=attachment",
           };
           setAttributes(attributes);
         });
-    } catch (err) {
-      console.log("articlePhoto err", err);
-    }
+    } catch (err) {}
   }
 })();

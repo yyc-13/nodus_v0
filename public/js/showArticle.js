@@ -464,6 +464,11 @@ $("#newCollectionBtn").on("click", function () {
     Swal.fire("請先登入");
     return;
   }
+  const newColInput = $("#newCollectionInput").val();
+  if (newColInput == "") {
+    Swal.fire("收藏清單不可為空");
+    return;
+  }
   let newCollectionList = {
     collectionName: $("#newCollectionInput").val(),
   };

@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       displayResults(results);
     } catch (err) {
-      console.log(err);
       alert("Failed to search Unsplash");
     }
     spinner.classList.add("hidden");

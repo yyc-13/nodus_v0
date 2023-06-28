@@ -23,7 +23,7 @@ const createUser = async (
       "select * from user_info where email = ? ",
       [email]
     );
-    console.log(searchResult);
+
     if (searchResult.length > 0) {
       return "email have been registered.";
     }
@@ -36,7 +36,7 @@ const createUser = async (
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -55,7 +55,7 @@ const authLogIn = async (email, hashedPassword) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -74,7 +74,7 @@ const storeToken = async (accessToken, userEmail) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -93,12 +93,12 @@ const userArticle = async (user) => {
     const [articles] = await conn.query(
       `select * from articles where user_id = ${user_id}`
     );
-    console.log(articles);
+
     await conn.query("COMMIT");
     return articles;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -140,7 +140,7 @@ const userChannel = async (url_id) => {
     return { userResult, articleResult };
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -164,7 +164,6 @@ const subscribe = async (type, articleslug, userId) => {
       const [result] = await conn.query(
         `update user_info set sub_count = sub_count + 1 where user_id = ${channel_user_id}`
       );
-      console.log("sub user_info result", result);
     } else if (type == "unsubscribe") {
       [subResult] = await conn.query(
         `delete from subscription where channel_user_id = ${channel_user_id} and user_id = ${userId}`
@@ -177,7 +176,7 @@ const subscribe = async (type, articleslug, userId) => {
     return subResult;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -196,7 +195,7 @@ const newcollection = async (userId, collectionName) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -214,7 +213,7 @@ const channelCoverImg = async (userId, coverImgUrl) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -232,7 +231,7 @@ const profilePic = async (userId, coverImgUrl) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -251,7 +250,7 @@ const changedescription = async (userId, channelName, description) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -269,7 +268,7 @@ const findUser = async (userId) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -290,11 +289,11 @@ const collectionList = async (userId) => {
       );
       collectionList[result[i].collection_name] = result2;
     }
-    console.log(collectionList);
+
     return collectionList;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -311,7 +310,7 @@ const channelAuth = async (userUrl) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -327,7 +326,7 @@ const subscription = async (userId) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();
@@ -343,7 +342,7 @@ const getuser = async (userId) => {
     return result;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+
     return -1;
   } finally {
     conn.release();

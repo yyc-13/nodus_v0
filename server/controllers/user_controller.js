@@ -44,7 +44,7 @@ const userLogin = async (req, res) => {
     };
 
     const userOutput = { data: userData };
-    console.log(userOutput);
+
     const accessToken = generateAccessToken(userOutput);
     await userModel.storeToken(accessToken, result[0].email);
     const user_info = await userModel.findUser(result[0].user_id);
@@ -75,7 +75,7 @@ const userRegister = async (req, res) => {
   const url_id = Number(
     Math.random().toString().substr(3) + Date.now()
   ).toString(36);
-  console.log("url_id", url_id);
+
   const created_date = new Date().today() + " @ " + new Date().timeNow();
   const result = await userModel.createUser(
     created_date,
@@ -93,7 +93,7 @@ const userRegister = async (req, res) => {
     userId: result.insertId,
   };
   const user = { data: userData };
-  console.log(result);
+
   if (result == "email have been registered.") {
     res.status(400).send({ status: "email have been registered." });
   } else {
@@ -119,10 +119,8 @@ const userRegister = async (req, res) => {
 };
 
 const userArticle = async (req, res) => {
-  console.log(req.user);
   const user = req.user;
   const result = await userModel.userArticle(user);
-  console.log(result);
 
   res.status(200).json(result);
   return;
@@ -131,12 +129,12 @@ const userArticle = async (req, res) => {
 const profileOrSignIn = async (req, res) => {
   if (req.signedCookies.accessToken) {
     const accessToken = req.signedCookies.accessToken;
-    console.log(accessToken);
+
     try {
       const user = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
-      console.log(user);
+
       const result = await userModel.findUser(user.data.userId);
-      console.log(result);
+
       res.redirect(`/user/${result[0].url_id}`);
     } catch (err) {
       console.error(err);
@@ -149,10 +147,8 @@ const profileOrSignIn = async (req, res) => {
 };
 
 const userChannel = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
   const result = await userModel.userChannel(req.body.url_id);
-  console.log("result", result);
+
   let data = {
     userResult: result.userResult,
     articleResult: result.articleResult,
@@ -161,55 +157,47 @@ const userChannel = async (req, res) => {
 };
 
 const subscribe = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
   const result = await userModel.subscribe(
     "subscribe",
     req.body.articleSlug,
     req.user.data.userId
   );
-  console.log("result", result);
+
   res.status(200).json(result);
 };
 const unsubscribe = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
   const result = await userModel.subscribe(
     "unsubscribe",
     req.body.articleSlug,
     req.user.data.userId
   );
-  console.log("result", result);
+
   res.status(200).json(result);
 };
 
 const newcollection = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
   const result = await userModel.newcollection(
     req.user.data.userId,
     req.body.collectionName
   );
-  console.log("result", result);
+
   res.status(200).json(result);
 };
 
 const changedescription = async (req, res) => {
-  console.log("req.user", req.user);
-  console.log("req.body", req.body);
   const result = await userModel.changedescription(
     req.user.data.userId,
     req.body.channelName,
     req.body.description
   );
-  console.log("result", result);
+
   res.redirect("back");
 };
 
 const collectionList = async (req, res) => {
   if (req.user) {
     const result = await userModel.collectionList(req.user.data.userId);
-    console.log("result", result);
+
     res.status(200).json(result);
   } else {
     const result = [];
@@ -218,8 +206,6 @@ const collectionList = async (req, res) => {
 };
 
 const channelAuth = async (req, res) => {
-  console.log("channelAuth", req.user);
-  console.log("channelAuth", req.body);
   const result = await userModel.channelAuth(req.body.userUrl);
   if (result[0].user_id == req.user.data.userId) {
     res.status(200).json(1);
@@ -234,7 +220,7 @@ const subscription = async (req, res) => {
     return;
   }
   const result = await userModel.subscription(req.user.data.userId);
-  console.log(result);
+
   res.status(200).json(result);
 };
 
@@ -244,7 +230,7 @@ const getuser = async (req, res) => {
     return;
   }
   const result = await userModel.getuser(req.user.data.userId);
-  console.log(result);
+
   res.status(200).json(result);
 };
 
