@@ -1,58 +1,55 @@
 # Nodus
 
-> A youtube-like article platform dedicated to providing writers a seamlessly edit experience and an interactive platform where readers can like, comment, collect to articles and subscribe to writers.
+Nodus is a YouTube-inspired article platform that caters to writers. It offers an effortless editing experience and an interactive space for readers to engage with articles. Users can like, comment, add articles to collections, and subscribe to writers.
 
-&nbsp;
+![Nodus](https://imgur.com/u7FoPYH.png)
 
-![](https://imgur.com/u7FoPYH.png)
+## Demo Credentials
 
-## Test User:
+- **Email:** test@nodus.com
+- **Password:** test123
 
-**Email:** test@nodus.com
+## Table of Contents
 
-**Password:** test123
-
-## Table of Content
-
-- [Features](#Features)
-- [Technologies](#Technologies)
-- [Contact](#Contact)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Contact](#contact)
 
 ## Features
 
 ### Markdown Editor
 
-- **Upload articles with markdown syntax**
-  ![](https://imgur.com/p6hbFYO.png)
-- **Select piture from computer or UNSPLASH**
-  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/unsplash_select.gif)
-- **Create tags in split second**
-  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/create_tags.gif)
+- **Compose and publish articles using Markdown syntax**
+  ![Markdown Editor](https://imgur.com/p6hbFYO.png)
+- **Choose images from your device or via Unsplash**
+- **Generate tags swiftly**
 
 ### Search Articles
 
-- **With Tags**
-  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/search_tags.gif)
-- **With Search Bar**
-  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/search_bar.gif)
-- **With Category**
-  ![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/search_categories.gif)
+- **Search by Tags**
+- **Search using the Search Bar**
+- **Search by Category**
 
-### Like, comment, subscribe, Add to collection
+### Engagement Features
 
-![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/like_comment_subscribe.gif)
+- Like, comment, subscribe, and add articles to collections
+  ![Engagement Features](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/like_comment_subscribe.gif)
 
-### Edit Profile and articles
+### Edit Profile and Articles
 
-![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/edit_profile_article.gif)
+- Update your profile and manage your articles
+  ![Edit Features](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/edit_profile_article.gif)
 
-### View Collections, History, Subscriptions,
+### View Collections, History, and Subscriptions
 
-![](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/collection_history_sub.gif)
+- Manage and browse your collections, reading history, and subscriptions
+  ![View Features](https://raw.githubusercontent.com/yangyueche/nodus_readme_files/master/readme_gifs/collection_history_sub.gif)
+
+## Technologies
 
 ### Architecture
 
-![](https://imgur.com/g4YZzcI.png)
+![Architecture](https://imgur.com/g4YZzcI.png)
 
 ### Backend
 
@@ -70,13 +67,12 @@
 ### Database
 
 - **RDS** + **MySQL**
-<!-- - ORM: **Sequelize** -->
 - Schema:
-  ![](https://imgur.com/u1af0ZE.png)
+  ![Schema](https://imgur.com/u1af0ZE.png)
 
 ### Networking
 
-- Protocol: **HTTP & HTTPs**
+- Protocol: **HTTP & HTTPS**
 - DNS: **GoDaddy**
 - Proxy server: **Nginx**
 
@@ -89,9 +85,3 @@
 
 - **EC2**
 - **S3**
-
-## Contact
-
-Yeuh-Che Yang
-
-yangyueche@gmail.com
